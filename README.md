@@ -8,7 +8,15 @@ Echo 0x 是一款面向 Halo 2.25+ 的暗色终端风格主题，适用于安全
   <img src="docs/assets/echo-0x-icon.svg" alt="Echo 0x icon" width="120">
 </p>
 
-![Echo 0x Cover](docs/assets/echo-0x-cover.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/Halo-2.25%2B-e63946?style=flat-square" alt="Halo 2.25+">
+  <img src="https://img.shields.io/badge/Release-1.0.0-1f1f1f?style=flat-square" alt="Release 1.0.0">
+  <img src="https://img.shields.io/badge/License-MIT-6b6b6b?style=flat-square" alt="MIT License">
+</p>
+
+<p align="center">
+  <img src="docs/assets/echo-0x-cover.svg" alt="Echo 0x Cover">
+</p>
 
 ## 项目概览
 

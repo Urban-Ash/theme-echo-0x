@@ -4,6 +4,8 @@
 
 这一版本面向 Halo 2.25+，围绕暗色终端风格、数学公式封面与技术内容表达进行了完整交付，可直接作为后续迭代的稳定基线使用。
 
+![Echo 0x Cover](https://raw.githubusercontent.com/Urban-Ash/theme-echo-0x/main/docs/assets/echo-0x-cover.svg)
+
 ## 发布亮点
 
 - 提供统一的暗色终端视觉风格，适合安全、AI 与技术博客场景
