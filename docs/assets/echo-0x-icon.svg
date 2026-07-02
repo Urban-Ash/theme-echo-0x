@@ -1,0 +1,54 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="44" x2="448" y2="468" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111111"/>
+      <stop offset="1" stop-color="#050505"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="100" y1="112" x2="412" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#171717"/>
+      <stop offset="1" stop-color="#0D0D0D"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="112" y1="126" x2="393" y2="387" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6B7A"/>
+      <stop offset="1" stop-color="#E63946"/>
+    </linearGradient>
+    <filter id="glow" x="58" y="58" width="396" height="396" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="rounded">
+      <rect x="64" y="64" width="384" height="384" rx="88"/>
+    </clipPath>
+  </defs>
+
+  <rect x="64" y="64" width="384" height="384" rx="88" fill="url(#bg)"/>
+  <g clip-path="url(#rounded)">
+    <rect x="64" y="64" width="384" height="384" fill="url(#bg)"/>
+    <path d="M64 160H448" stroke="#1F1F1F" stroke-width="2"/>
+    <path d="M112 64V448M160 64V448M208 64V448M256 64V448M304 64V448M352 64V448M400 64V448" stroke="#151515" stroke-width="1"/>
+    <path d="M64 112H448M64 208H448M64 256H448M64 304H448M64 352H448M64 400H448" stroke="#151515" stroke-width="1"/>
+    <rect x="96" y="96" width="320" height="320" rx="44" fill="url(#panel)" stroke="#222222" stroke-width="2"/>
+    <rect x="96" y="96" width="320" height="42" rx="18" fill="#131313"/>
+    <circle cx="124" cy="117" r="6" fill="#E63946"/>
+    <circle cx="146" cy="117" r="6" fill="#8A2A35"/>
+    <circle cx="168" cy="117" r="6" fill="#4C1E24"/>
+
+    <path d="M133 342C173 282 205 234 230 197L256 159L283 197C307 234 339 282 379 342" stroke="url(#accent)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <path d="M175 316H337" stroke="#F5B7BE" stroke-width="12" stroke-linecap="round"/>
+    <path d="M184 242H232" stroke="#F5B7BE" stroke-width="10" stroke-linecap="round"/>
+    <path d="M280 242H328" stroke="#F5B7BE" stroke-width="10" stroke-linecap="round"/>
+
+    <path d="M132 376H380" stroke="#252525" stroke-width="2"/>
+    <path d="M132 394H380" stroke="#1C1C1C" stroke-width="2"/>
+    <text x="132" y="182" fill="#6B6B6B" font-size="18" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">hash(x) = y xor z</text>
+    <text x="132" y="208" fill="#6B6B6B" font-size="18" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">L(t) = sin(wt) + e^-x</text>
+    <text x="132" y="424" fill="#EDEDED" font-size="36" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" letter-spacing="4">ECHO_0x</text>
+
+    <rect x="94" y="260" width="324" height="7" fill="#E63946" opacity="0.16"/>
+    <rect x="94" y="268" width="324" height="3" fill="#E63946" opacity="0.28"/>
+    <rect x="94" y="274" width="324" height="2" fill="#E63946" opacity="0.18"/>
+  </g>
+</svg>

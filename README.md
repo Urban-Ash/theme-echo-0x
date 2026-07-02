@@ -4,7 +4,11 @@
 
 Echo 0x 是一款面向 Halo 2.25+ 的暗色终端风格主题，适用于安全研究、AI 记录、开发随笔与技术博客场景。主题围绕“终端感、公式感、秩序感”构建视觉体验，同时保留 Halo 主题在内容展示、模板扩展与后台配置上的灵活性。
 
-![preview](https://placehold.co/1200x600/0a0a0a/e63946?text=Echo+0x+Theme+Preview)
+<p align="center">
+  <img src="docs/assets/echo-0x-icon.svg" alt="Echo 0x icon" width="120">
+</p>
+
+![Echo 0x Cover](docs/assets/echo-0x-cover.svg)
 
 ## 项目概览
 
