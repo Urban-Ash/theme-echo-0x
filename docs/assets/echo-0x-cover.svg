@@ -1,62 +1,34 @@
 <svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="128" y1="64" x2="1136" y2="608" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0D0D0F"/>
-      <stop offset="1" stop-color="#050506"/>
+    <linearGradient id="bg" x1="84" y1="56" x2="1194" y2="580" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111112"/>
+      <stop offset="1" stop-color="#080809"/>
     </linearGradient>
-    <linearGradient id="panel" x1="154" y1="118" x2="1120" y2="566" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#131316"/>
-      <stop offset="1" stop-color="#0C0C0D"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="232" y1="126" x2="967" y2="495" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FF7C88"/>
+    <linearGradient id="accent" x1="786" y1="200" x2="1042" y2="426" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF7B87"/>
       <stop offset="1" stop-color="#E63946"/>
     </linearGradient>
-    <filter id="glow" x="144" y="72" width="1012" height="496" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feGaussianBlur stdDeviation="28" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <clipPath id="frame">
-      <rect x="112" y="88" width="1056" height="464" rx="32"/>
-    </clipPath>
   </defs>
 
-  <rect width="1280" height="640" fill="#090909"/>
-  <rect x="48" y="40" width="1184" height="560" rx="44" fill="url(#bg)" stroke="#1B1B1D" stroke-width="2"/>
-  <g clip-path="url(#frame)">
-    <rect x="112" y="88" width="1056" height="464" rx="32" fill="url(#panel)"/>
-    <path d="M112 142H1168" stroke="#1E1E1F" stroke-width="2"/>
-    <path d="M176 88V552M272 88V552M368 88V552M464 88V552M560 88V552M656 88V552M752 88V552M848 88V552M944 88V552M1040 88V552" stroke="#151517" stroke-width="1"/>
-    <path d="M112 190H1168M112 238H1168M112 286H1168M112 334H1168M112 382H1168M112 430H1168M112 478H1168" stroke="#151517" stroke-width="1"/>
+  <rect width="1280" height="640" fill="#0A0A0A"/>
+  <rect x="76" y="76" width="1128" height="488" rx="36" fill="url(#bg)" stroke="#1D1D20" stroke-width="2"/>
+  <path d="M76 144H1204" stroke="#202024" stroke-width="2"/>
+  <circle cx="116" cy="110" r="8" fill="#E63946"/>
+  <circle cx="146" cy="110" r="8" fill="#4D2429"/>
+  <circle cx="176" cy="110" r="8" fill="#28282B"/>
 
-    <rect x="140" y="112" width="1000" height="42" rx="18" fill="#101012"/>
-    <circle cx="174" cy="133" r="7" fill="#E63946"/>
-    <circle cx="200" cy="133" r="7" fill="#8E2833"/>
-    <circle cx="226" cy="133" r="7" fill="#502126"/>
-    <text x="1018" y="139" fill="#6B6B6B" font-size="16" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">registry://theme-echo-0x</text>
+  <text x="142" y="285" fill="#F2F2F2" font-size="106" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" letter-spacing="8">ECHO_0x</text>
+  <text x="146" y="346" fill="#A8A8AD" font-size="30" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">Minimal dark terminal theme for Halo.</text>
+  <text x="146" y="446" fill="#6F6F74" font-size="26" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">&gt; elegant interface_</text>
+  <text x="146" y="490" fill="#6F6F74" font-size="26" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">&gt; formula-driven mood_</text>
 
-    <text x="178" y="218" fill="#EDEDED" font-size="72" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" letter-spacing="10">ECHO_0x</text>
-    <text x="182" y="262" fill="#B8B8B8" font-size="22" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">Dark terminal aesthetics for Halo technical publishing.</text>
-    <text x="182" y="302" fill="#6B6B6B" font-size="20" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">AI / CRYPTO / FORMULA / PJAX / HALO 2.25+</text>
+  <rect x="750" y="188" width="286" height="286" rx="8" stroke="#FF4D5A" stroke-width="10"/>
+  <circle cx="893" cy="331" r="104" stroke="#242428" stroke-width="2"/>
+  <circle cx="893" cy="331" r="76" fill="url(#accent)"/>
+  <path d="M813 331H973" stroke="#2D2D31" stroke-width="2"/>
+  <path d="M893 251V411" stroke="#2D2D31" stroke-width="2"/>
+  <path d="M810 418L858 372L894 402L979 316" stroke="#F3B8BF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
 
-    <path d="M714 434C763 347 808 275 849 216L896 148L943 216C984 275 1029 347 1078 434" stroke="url(#accent)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
-    <path d="M771 394H1021" stroke="#F6C4CA" stroke-width="14" stroke-linecap="round"/>
-    <path d="M781 292H858" stroke="#F6C4CA" stroke-width="12" stroke-linecap="round"/>
-    <path d="M933 292H1009" stroke="#F6C4CA" stroke-width="12" stroke-linecap="round"/>
-
-    <path d="M182 412H596" stroke="#242426" stroke-width="2"/>
-    <path d="M182 446H596" stroke="#242426" stroke-width="2"/>
-    <path d="M182 480H596" stroke="#242426" stroke-width="2"/>
-    <text x="182" y="396" fill="#8B8B8B" font-size="20" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">f(x,t)   = sin(x + wt) * exp(-x / 8)</text>
-    <text x="182" y="430" fill="#8B8B8B" font-size="20" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">hash_n   = xor(block_n, key_schedule)</text>
-    <text x="182" y="464" fill="#8B8B8B" font-size="20" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">signal_t = ReLU(Wx + b) -> softmax(logits)</text>
-    <text x="182" y="514" fill="#E63946" font-size="18" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace">STATUS  :: STABLE_BASELINE_1.0.0</text>
-
-    <rect x="140" y="318" width="1000" height="10" fill="#E63946" opacity="0.08"/>
-    <rect x="140" y="330" width="1000" height="4" fill="#E63946" opacity="0.2"/>
-    <rect x="140" y="338" width="1000" height="2" fill="#E63946" opacity="0.12"/>
-  </g>
+  <rect x="142" y="520" width="172" height="4" rx="2" fill="#E63946"/>
+  <rect x="330" y="520" width="88" height="4" rx="2" fill="#2B2B2F"/>
 </svg>
