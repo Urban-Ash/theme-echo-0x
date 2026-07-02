@@ -26,13 +26,13 @@
           <p
             class="aux-page-lead"
             th:if="${isPluginLinks}">
-            一些常去的、值得推荐的地方。点进任意一条记录就能直接跳转，
-            按分组筛选时会像切换不同的连接列表。
+            这些是长期保持连接的站点、项目和朋友。每个分组都像一份链路清单，
+            切过去，就会看到另一条外部世界的入口。
           </p>
           <p
             class="aux-page-lead"
             th:if="${!isPluginLinks}"
-            th:text="${singlePage != null && !#strings.isEmpty(singlePage.status.excerpt) ? singlePage.status.excerpt : '这里既可以放友情链接，也可以继续写一些资源说明或交换方式。'}">
+            th:text="${singlePage != null && !#strings.isEmpty(singlePage.status.excerpt) ? singlePage.status.excerpt : '这里适合放长期保存的入口、协作方式，或者你愿意反复回来的地址。'}">
             Useful links and references.
           </p>
         </div>
@@ -62,67 +62,49 @@
             </a>
           </nav>
 
-          <div class="linksindex-empty" th:if="${group == null && (allGroups == null || #lists.isEmpty(allGroups))}">
+          <div class="linksindex-empty empty-state" th:if="${group == null && (allGroups == null || #lists.isEmpty(allGroups))}">
             <div>
               <strong>~/empty</strong>
-              还没有任何友链记录，先在插件后台添加分组和链接，这里就会生成终端列表。
+              链路表还是空的，等分组和链接写进来之后，这里会像终端一样逐条亮起。
             </div>
           </div>
 
-          <div class="linksindex-empty" th:if="${group != null && (matchedGroups == null || #lists.isEmpty(matchedGroups))}">
+          <div class="linksindex-empty empty-state" th:if="${group != null && (matchedGroups == null || #lists.isEmpty(matchedGroups))}">
             <div>
               <strong>~/empty</strong>
-              当前分组下还没有可展示的链接，换一个分组或者返回 `all` 看全部条目。
+              这一组链路还没有回应，换一条线路，或者回到 `all` 看完整清单。
             </div>
           </div>
 
           <th:block th:if="${effectiveGroups != null && !#lists.isEmpty(effectiveGroups)}">
             <section class="linksindex-section" th:each="item, itemStat : ${effectiveGroups}">
-              <div class="linksindex-section-head">
-                <h2>
-                  <span class="num" th:text="${itemStat.count < 10 ? '0' + itemStat.count : itemStat.count}">01</span>
-                  <span th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'Ungrouped' : item.spec.displayName}">Group</span>
-                </h2>
-                <div class="meta">
-                  <span>$ <span class="accent">links list</span></span>
-                  <span th:text="${#lists.size(item.links)} + ' entries'">0 entries</span>
-                </div>
-              </div>
+              <div class="linksindex-group-label"
+                th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'ungrouped' : item.spec.displayName}">Group</div>
 
-              <div class="linksindex-terminal">
-                <div class="linksindex-head">
-                  <span class="dot dot-r"></span>
-                  <span class="dot dot-y"></span>
-                  <span class="dot dot-g"></span>
-                  <span class="title" th:text="${'~/links/' + (item.metadata != null && !#strings.isEmpty(item.metadata.name) ? item.metadata.name : 'group') + '.json'}">~/links/group.json</span>
-                  <span class="blink" th:text="${#lists.size(item.links)} + ' entries'">0 entries</span>
-                </div>
-
-                <a
-                  class="linksindex-row"
-                  th:each="link, linkStat : ${item.links}"
-                  th:href="${link.spec.url}"
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  <span class="arrow">→</span>
-                  <span
-                    class="status"
-                    th:classappend="${linkStat.count % 6 == 0 ? ' warn' : (linkStat.count % 5 == 0 ? ' idle' : ' online')}">
-                    <span class="dot"></span>
-                    <span th:text="${linkStat.count % 6 == 0 ? 'warn' : (linkStat.count % 5 == 0 ? 'idle' : 'online')}">online</span>
+              <a
+                class="linksindex-row"
+                th:each="link, linkStat : ${item.links}"
+                th:href="${link.spec.url}"
+                target="_blank"
+                rel="noopener noreferrer">
+                <span class="arrow">→</span>
+                <span
+                  class="status"
+                  th:classappend="${linkStat.count % 6 == 0 ? ' warn' : (linkStat.count % 5 == 0 ? ' idle' : ' online')}">
+                  <span class="dot"></span>
+                  <span th:text="${linkStat.count % 6 == 0 ? 'warn' : (linkStat.count % 5 == 0 ? 'idle' : 'online')}">online</span>
+                </span>
+                <span class="name">
+                  <strong th:text="${link.spec.displayName}">Link name</strong>
+                  <span class="desc">
+                    <span class="url" th:text="${link.spec.url}">https://example.com</span>
+                    <span th:text="${#strings.isEmpty(link.spec.description) ? '暂无补充说明。' : link.spec.description}">Link description</span>
                   </span>
-                  <span class="name">
-                    <strong th:text="${link.spec.displayName}">Link name</strong>
-                    <span class="desc">
-                      <span class="url" th:text="${link.spec.url}">https://example.com</span>
-                      <span th:text="${#strings.isEmpty(link.spec.description) ? '暂无补充说明。' : link.spec.description}">Link description</span>
-                    </span>
-                  </span>
-                  <span
-                    class="cat-tag"
-                    th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'misc' : item.spec.displayName}">group</span>
-                </a>
-              </div>
+                </span>
+                <span
+                  class="cat-tag"
+                  th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'misc' : item.spec.displayName}">group</span>
+              </a>
             </section>
           </th:block>
         </th:block>

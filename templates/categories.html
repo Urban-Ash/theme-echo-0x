@@ -24,8 +24,8 @@
             <span class="stroke">~/</span><span>categor</span><span class="accent">ies</span>
           </h1>
           <p class="aux-page-lead">
-            比起标签，这里更像一张目录树。主分类负责大的主题归档，
-            子分类继续往下分叉，方便沿着主题路径追内容。
+            这里不是热词表，而是目录树。每个节点都像一段路径，
+            往下走一层，就更接近问题真正被拆开的地方。
           </p>
         </div>
 
@@ -39,10 +39,10 @@
           <th:block th:replace="~{modules/category-tree :: single(categories=${categories}, depth=${0})}"></th:block>
         </div>
 
-        <div class="catindex-empty" th:if="${categories == null || #lists.isEmpty(categories)}">
+        <div class="catindex-empty empty-state" th:if="${categories == null || #lists.isEmpty(categories)}">
           <div>
             <strong>~/empty</strong>
-            这里还没有分类结构，等内容整理完成之后再回来查看目录树。
+            目录树还没有开始分叉，等记录被归档之后，再回来沿着节点继续下潜。
           </div>
         </div>
       </section>

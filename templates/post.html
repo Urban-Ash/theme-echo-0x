@@ -4,33 +4,21 @@
 <body>
   <header th:replace="~{modules/header :: header(path='~/post')}"></header>
 
-  <div data-pjax-root>
+  <div
+    data-pjax-root
+    th:with="
+      publishedDate=${#temporals.format(post.spec.publishTime, 'yyyy / MM / dd')},
+      publishedClock=${#temporals.format(post.spec.publishTime, 'E HH:mm')},
+      firstCategory=${post.categories != null && !#lists.isEmpty(post.categories) ? post.categories[0] : null},
+      visitCount=${post.stats == null || post.stats.visit == null ? 0 : post.stats.visit}">
   <aside
     class="article-toc"
     id="articleToc"
     th:if="${theme.config.post == null || theme.config.post.showToc == null || theme.config.post.showToc == true || theme.config.post.showToc == 'true'}"
     aria-label="章节导航"></aside>
 
-  <article class="article-shell">
-    <header class="article-head">
-      <div class="post-meta">
-        <span class="idx" th:text="${post.spec.publishTime}">publish time</span>
-        <span th:if="${post.owner != null}" th:text="${post.owner.displayName}">author</span>
-        <span th:text="${post.status.commentsCount} + ' comments'">0 comments</span>
-      </div>
-      <h1 th:text="${post.spec.title}">Post title</h1>
-      <p class="post-excerpt" th:text="${post.status.excerpt}">Excerpt</p>
-      <div class="post-meta" th:if="${!#lists.isEmpty(post.categories) || !#lists.isEmpty(post.tags)}">
-        <span class="post-tags" th:if="${!#lists.isEmpty(post.categories)}">
-          <a th:each="category : ${post.categories}" th:href="@{${category.status.permalink}}" th:text="${category.spec.displayName}">category</a>
-        </span>
-        <span class="post-tags" th:if="${!#lists.isEmpty(post.tags)}">
-          <a th:each="tag : ${post.tags}" th:href="@{${tag.status.permalink}}" th:text="'#' + ${tag.spec.displayName}">tag</a>
-        </span>
-      </div>
-    </header>
-
-    <div class="article-cover">
+  <article class="article-shell post-article-shell">
+    <div class="post-hero-cover">
       <img
         th:if="${!#strings.isEmpty(post.spec.cover)}"
         th:src="${post.spec.cover}"
@@ -43,7 +31,48 @@
         th:unless="${!#strings.isEmpty(post.spec.cover)}"
         th:attr="data-cover-title=${post.spec.title},aria-label=${post.spec.title}"
         role="img"></div>
+      <span class="post-hero-badge">
+        <span>entry</span>
+        <span class="accent" th:text="${publishedDate}">2026 / 07 / 02</span>
+      </span>
     </div>
+
+    <header class="post-hero-head">
+      <div class="post-hero-meta">
+        <span th:text="${publishedDate}">2026 / 07 / 02</span>
+        <span class="dot">·</span>
+        <span th:text="${publishedClock}">Wed 15:34</span>
+        <span class="dot">·</span>
+        <span
+          class="accent"
+          th:text="${firstCategory != null ? firstCategory.spec.displayName : 'uncategorized'}">security</span>
+        <span class="dot">·</span>
+        <span th:text="${visitCount} + ' visits'">0 visits</span>
+      </div>
+      <h1 class="post-hero-title" th:text="${post.spec.title}">Post title</h1>
+      <p
+        class="post-hero-lead"
+        th:if="${!#strings.isEmpty(post.status.excerpt)}"
+        th:text="${post.status.excerpt}">Excerpt</p>
+      <div
+        class="post-hero-tags"
+        th:if="${!#lists.isEmpty(post.categories) || !#lists.isEmpty(post.tags)}">
+        <th:block th:if="${!#lists.isEmpty(post.categories)}">
+          <a
+            class="post-hero-chip"
+            th:each="category : ${post.categories}"
+            th:href="@{${category.status.permalink}}"
+            th:text="${category.spec.displayName}">category</a>
+        </th:block>
+        <th:block th:if="${!#lists.isEmpty(post.tags)}">
+          <a
+            class="post-hero-chip is-tag"
+            th:each="tag : ${post.tags}"
+            th:href="@{${tag.status.permalink}}"
+            th:text="${'# ' + tag.spec.displayName}"># tag</a>
+        </th:block>
+      </div>
+    </header>
 
     <div class="content" th:utext="${post.content.content}"></div>
 

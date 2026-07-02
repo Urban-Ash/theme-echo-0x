@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.0 (2026-07-03)
+
+### Added
+- Added a unified `empty-state` base class for shared empty views across tag, category, archive, and links related pages
+- Added release notes for the `1.2.0` milestone
+
+### Changed
+- Refined the post page hero typography, cover area, code block styling, and overall reading flow
+- Restored the post page structure to a more stable baseline while keeping the refreshed article head
+- Consolidated duplicated CSS for auxiliary pages, tag/category detail pages, and shared empty states
+- Updated project documentation and release references to `1.2.0`
+- Bumped theme version to `1.2.0`
+
+### Fixed
+- Fixed conflicting legacy post cover styles by removing unused selectors and reducing old article-page leftovers
+- Fixed consistency issues between tag and category detail pages by merging duplicated style branches
+- Fixed maintainability issues in `style.css` by collapsing repeated shell, frame, and empty-state definitions
+
 ## 1.1.0 (2026-07-03)
 
 ### Added

@@ -1,28 +1,140 @@
 <!DOCTYPE html>
 <html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="~{modules/head :: head(${tag.spec.displayName}, ${tag.spec.description})}"></head>
-<body>
-  <header th:replace="~{modules/header :: header(path='~/tag')}"></header>
+<head th:replace="~{modules/head :: head(${tag.spec.displayName}, ${'Tag archive · ' + tag.spec.displayName})}"></head>
+<body class="aux-page-body tagentry-page-body">
+  <header th:replace="~{modules/header :: header(path=${'~/tags/' + (!#strings.isEmpty(tag.spec.slug) ? tag.spec.slug : tag.spec.displayName)})}"></header>
 
-  <div data-pjax-root>
-  <main class="page-shell">
-    <div class="page-hero">
-      <h1 th:text="${tag.spec.displayName}">Tag</h1>
-      <div class="meta">
-        <span th:text="${posts.total}">0</span> posts<br>
-        <span th:text="${tag.spec.slug}">slug</span>
-      </div>
-    </div>
+  <div
+    class="aux-page-main"
+    data-pjax-root
+    th:with="
+      tagPosts=${posts != null ? posts.items : null},
+      tagPath=${'~/tags/' + (!#strings.isEmpty(tag.spec.slug) ? tag.spec.slug : tag.spec.displayName)},
+      postCount=${posts == null ? 0 : posts.total},
+      latestPost=${tagPosts != null && !#lists.isEmpty(tagPosts) ? tagPosts[0] : null},
+      oldestPost=${tagPosts != null && !#lists.isEmpty(tagPosts) ? tagPosts[#lists.size(tagPosts) - 1] : null}">
+    <main class="aux-page-shell tagentry-page-shell">
+      <section class="aux-page-frame tagentry-frame">
+        <div class="aux-page-kicker">
+          <span>// tag archive</span>
+          <span><span th:text="${postCount}">0</span> posts indexed</span>
+          <span>timeline stream</span>
+        </div>
 
-    <div class="posts" th:if="${!#lists.isEmpty(posts.items)}">
-      <th:block th:each="post, stat : ${posts.items}">
-        <th:block th:replace="~{modules/post-card :: postCard(post=${post}, index=${stat.index})}"></th:block>
-      </th:block>
-    </div>
-    <div class="empty-state" th:if="${#lists.isEmpty(posts.items)}">no posts with this tag</div>
+        <div class="tagentry-hero">
+          <div class="aux-page-head tagentry-head">
+            <h1 class="aux-page-title tagentry-title">
+              <span class="stroke">#</span><span th:text="${tag.spec.displayName}">pwn</span>
+            </h1>
+            <p class="aux-page-lead">
+              同一个标签下的记录会在这里重新排成一条时间流。它们共享相近的问题域，
+              也暴露出同一条兴趣轨迹。
+            </p>
+          </div>
 
-    <div th:if="${posts.hasPrevious() || posts.hasNext()}" th:replace="~{modules/pagination :: pagination(result=${posts})}"></div>
-  </main>
+          <div class="tagentry-route" aria-label="Current tag path">
+            <span class="label">route</span>
+            <strong th:text="${tagPath}">~/tags/pwn</strong>
+          </div>
+        </div>
+
+        <div class="aux-page-stats">
+          <span>posts<strong th:text="${postCount}">0</strong></span>
+          <span>first<strong th:text="${oldestPost == null ? '--' : #temporals.format(oldestPost.spec.publishTime, 'yyyy.MM.dd')}">--</strong></span>
+          <span>latest<strong class="accent" th:text="${latestPost == null ? '--' : #temporals.format(latestPost.spec.publishTime, 'yyyy.MM.dd')}">--</strong></span>
+        </div>
+
+        <div class="tagentry-layout" th:if="${tagPosts != null && !#lists.isEmpty(tagPosts)}">
+          <aside class="tagentry-jump" aria-label="Jump to month">
+            <span class="tagentry-jump-title">// jump to</span>
+            <div class="tagentry-jump-list">
+              <th:block
+                th:each="post, postStat : ${tagPosts}"
+                th:with="
+                  currentBucket=${#temporals.format(post.spec.publishTime, 'yyyy.MM')},
+                  previousBucket=${postStat.index > 0 ? #temporals.format(tagPosts[postStat.index - 1].spec.publishTime, 'yyyy.MM') : ''},
+                  monthAnchor=${'tag-month-' + #strings.replace(currentBucket, '.', '-')}">
+                <a
+                  class="tagentry-jump-link"
+                  th:if="${postStat.index == 0 || currentBucket != previousBucket}"
+                  th:href="${'#' + monthAnchor}"
+                  th:text="${#temporals.format(post.spec.publishTime, 'yyyy / MM')}">2026 / 05</a>
+              </th:block>
+            </div>
+          </aside>
+
+          <div class="tagentry-stream">
+            <th:block
+              th:each="post, postStat : ${tagPosts}"
+              th:with="
+                currentBucket=${#temporals.format(post.spec.publishTime, 'yyyy.MM')},
+                previousBucket=${postStat.index > 0 ? #temporals.format(tagPosts[postStat.index - 1].spec.publishTime, 'yyyy.MM') : ''},
+                monthAnchor=${'tag-month-' + #strings.replace(currentBucket, '.', '-')}">
+              <div class="tagentry-month" th:if="${postStat.index == 0 || currentBucket != previousBucket}" th:id="${monthAnchor}">
+                <span class="month" th:text="${#temporals.format(post.spec.publishTime, 'yyyy / MM')}">2026 / 05</span>
+                <span class="count">tag stream</span>
+              </div>
+
+              <a class="tagentry-post" th:href="@{${post.status.permalink}}">
+                <div class="tagentry-cover">
+                  <img
+                    class="post-cover-media"
+                    th:if="${!#strings.isEmpty(post.spec.cover)}"
+                    th:src="${post.spec.cover}"
+                    th:alt="${post.spec.title}"
+                    loading="lazy"
+                    decoding="async">
+                  <div
+                    class="post-cover-media post-cover-formula"
+                    th:unless="${!#strings.isEmpty(post.spec.cover)}"
+                    th:attr="data-cover-index=${postStat.index},data-cover-title=${post.spec.title},aria-label=${post.spec.title}"
+                    role="img"></div>
+                  <span class="tagentry-index" th:text="${postStat.count < 10 ? 'no. 0' + postStat.count : 'no. ' + postStat.count}">no. 01</span>
+                  <span class="tagentry-chip" th:text="${'# ' + tag.spec.displayName}"># pwn</span>
+                </div>
+
+                <div class="tagentry-body" th:with="publishedAt=${post.spec.publishTime}">
+                  <div class="tagentry-time">
+                    <span class="day" th:text="${#temporals.format(publishedAt, 'MM.dd')}">05.03</span>
+                    <span th:text="${#temporals.format(publishedAt, 'E HH:mm')}">Sat 21:55</span>
+                  </div>
+
+                  <div class="tagentry-copy">
+                    <span
+                      class="tagentry-type"
+                      th:text="${post.categories != null && !#lists.isEmpty(post.categories) ? post.categories[0].spec.displayName : 'uncategorized'}">ctf</span>
+                    <strong class="tagentry-post-title" th:text="${post.spec.title}">Post title</strong>
+                    <span
+                      class="tagentry-excerpt"
+                      th:text="${#strings.isEmpty(post.status.excerpt) ? '这篇文章暂时没有摘要，点击进入正文查看完整内容。' : post.status.excerpt}">
+                      Post excerpt
+                    </span>
+                    <span class="tagentry-foot">
+                      <span th:text="${post.stats == null || post.stats.visit == null ? '0 visits' : post.stats.visit + ' visits'}">0 visits</span>
+                      <span class="sep">/</span>
+                      <span th:text="${post.owner != null ? post.owner.displayName : site.title}">Urban-Ash</span>
+                      <span class="arrow">-></span>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </th:block>
+          </div>
+        </div>
+
+        <div class="tagentry-empty empty-state" th:if="${tagPosts == null || #lists.isEmpty(tagPosts)}">
+          <div>
+            <strong>~/empty</strong>
+            这个标签下面暂时还没有回声，等新的记录写进来之后，这里会自己亮起来。
+          </div>
+        </div>
+
+        <div
+          class="tagentry-pagination"
+          th:if="${posts.hasPrevious() || posts.hasNext()}"
+          th:replace="~{modules/pagination :: pagination(result=${posts})}"></div>
+      </section>
+    </main>
   </div>
 
   <footer th:replace="~{modules/footer :: footer}"></footer>

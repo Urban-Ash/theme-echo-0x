@@ -22,6 +22,7 @@ theme-echo-0x/
 │   ├── CHANGELOG.md
 │   ├── RELEASE-1.0.0.md
 │   ├── RELEASE-1.1.0.md
+│   ├── RELEASE-1.2.0.md
 │   └── development.md
 └── templates/
     ├── index.html

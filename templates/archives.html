@@ -25,8 +25,8 @@
             <span class="stroke">~/</span><span>Arch</span><span class="accent">ives</span>
           </h1>
           <p class="aux-page-lead">
-            按时间倒序排列的全部文章。想找以前看过的一篇内容，
-            从年份往下扫，顺着时间线就能很快定位。
+            这里按时间回卷全部输出。年份像日志分区，月份像索引块；
+            沿着时间线往回扫，就能重新进入当时的现场。
           </p>
         </div>
 
@@ -59,18 +59,18 @@
                   <span
                     class="cat"
                     th:text="${post.categories != null && !#lists.isEmpty(post.categories) ? post.categories[0].spec.displayName : 'uncategorized'}">category</span>
-                  <span class="red" th:text="${post.status.commentsCount == null ? 0 : post.status.commentsCount}">0</span>
-                  <span>comments</span>
+                  <span class="red" th:text="${post.stats == null || post.stats.visit == null ? 0 : post.stats.visit}">0</span>
+                  <span>visits</span>
                 </span>
               </a>
             </th:block>
           </section>
         </div>
 
-        <div class="archindex-empty" th:if="${archiveItems == null || #lists.isEmpty(archiveItems)}">
+        <div class="archindex-empty empty-state" th:if="${archiveItems == null || #lists.isEmpty(archiveItems)}">
           <div>
             <strong>~/empty</strong>
-            这里还没有归档记录，等文章发布之后，这条时间线会从最新内容开始延展。
+            时间线还没有开始记录，等第一篇文章落下日期，这里就会向后延展。
           </div>
         </div>
 

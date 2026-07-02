@@ -47,8 +47,8 @@
             <div class="v" th:text="${stats.visit}">0</div>
           </div>
           <div class="cell">
-            <div class="k">comments</div>
-            <div class="v" th:text="${stats.comment}">0</div>
+            <div class="k">visits</div>
+            <div class="v" th:text="${stats.visit}">0</div>
           </div>
           <div class="cell">
             <div class="k">categories</div>
@@ -67,8 +67,8 @@
               <div class="v" th:text="${stats.visit}">0</div>
             </div>
             <div class="cell" th:if="${metric == 'comments'}">
-              <div class="k">comments</div>
-              <div class="v" th:text="${stats.comment}">0</div>
+              <div class="k">visits</div>
+              <div class="v" th:text="${stats.visit}">0</div>
             </div>
             <div class="cell" th:if="${metric == 'categories'}">
               <div class="k">categories</div>
