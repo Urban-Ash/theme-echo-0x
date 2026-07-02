@@ -1,0 +1,11 @@
+<th:block xmlns:th="https://www.thymeleaf.org">
+  <th:block th:fragment="single(categories)" th:each="category : ${categories}">
+    <a class="term-card" th:href="@{${category.status.permalink}}">
+      <span class="k">category</span>
+      <span class="v" th:text="${category.spec.displayName}">Category</span>
+      <span class="desc" th:if="${!#strings.isEmpty(category.spec.description)}" th:text="${category.spec.description}">Description</span>
+      <span class="desc" th:text="${category.postCount} + ' posts'">0 posts</span>
+    </a>
+    <th:block th:if="${!#lists.isEmpty(category.children)}" th:replace="~{modules/category-tree :: single(categories=${category.children})}"></th:block>
+  </th:block>
+</th:block>

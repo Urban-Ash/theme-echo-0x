@@ -1,0 +1,27 @@
+<footer id="contact" xmlns:th="https://www.thymeleaf.org" th:fragment="footer"
+  th:with="
+    showPrompt=${theme.config.footer == null || theme.config.footer.showPrompt == null || theme.config.footer.showPrompt == true || theme.config.footer.showPrompt == 'true'},
+    promptText=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.promptText) ? 'CC BY-NC-SA 4.0' : theme.config.footer.promptText},
+    promptUrl=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.promptUrl) ? 'https://creativecommons.org/licenses/by-nc-sa/4.0/' : theme.config.footer.promptUrl},
+    showFx=${theme.config.footer == null || theme.config.footer.showFx == null || theme.config.footer.showFx == true || theme.config.footer.showFx == 'true'},
+    showRss=${theme.config.footer == null || theme.config.footer.showRss == null || theme.config.footer.showRss == true || theme.config.footer.showRss == 'true'},
+    rssText=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.rssText) ? 'rss' : theme.config.footer.rssText},
+    rssUrl=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.rssUrl) ? '/rss.xml' : theme.config.footer.rssUrl},
+    showGithub=${theme.config.footer == null || theme.config.footer.showGithub == null || theme.config.footer.showGithub == true || theme.config.footer.showGithub == 'true'},
+    githubText=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.githubText) ? 'github' : theme.config.footer.githubText},
+    githubUrl=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.githubUrl) ? 'https://github.com/' : theme.config.footer.githubUrl},
+    showEmail=${theme.config.footer == null || theme.config.footer.showEmail == null || theme.config.footer.showEmail == true || theme.config.footer.showEmail == 'true'},
+    emailText=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.emailText) ? 'email' : theme.config.footer.emailText},
+    emailUrl=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.emailUrl) ? 'mailto:hello@example.com' : theme.config.footer.emailUrl}">
+  <div class="prompt" th:if="${showPrompt}">
+    cat
+    <a class="prompt-link" th:href="${promptUrl}" target="_blank" rel="noopener noreferrer" th:text="${promptText}">CC BY-NC-SA 4.0</a>
+    <span class="cursor-blink"></span>
+  </div>
+  <div class="actions" th:if="${showFx || showRss || showGithub || showEmail}">
+    <button id="bgToggle" type="button" th:if="${showFx}"><span class="state">pause fx</span></button>
+    <a th:if="${showRss}" th:href="${rssUrl}" th:text="${rssText}">rss</a>
+    <a th:if="${showGithub}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" th:text="${githubText}">github</a>
+    <a th:if="${showEmail}" th:href="${emailUrl}" th:text="${emailText}">email</a>
+  </div>
+</footer>

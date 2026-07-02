@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{modules/head :: head(${tag.spec.displayName}, ${tag.spec.description})}"></head>
+<body>
+  <header th:replace="~{modules/header :: header(path='~/tag')}"></header>
+
+  <div data-pjax-root>
+  <main class="page-shell">
+    <div class="page-hero">
+      <h1 th:text="${tag.spec.displayName}">Tag</h1>
+      <div class="meta">
+        <span th:text="${posts.total}">0</span> posts<br>
+        <span th:text="${tag.spec.slug}">slug</span>
+      </div>
+    </div>
+
+    <div class="posts" th:if="${!#lists.isEmpty(posts.items)}">
+      <th:block th:each="post, stat : ${posts.items}">
+        <th:block th:replace="~{modules/post-card :: postCard(post=${post}, index=${stat.index})}"></th:block>
+      </th:block>
+    </div>
+    <div class="empty-state" th:if="${#lists.isEmpty(posts.items)}">no posts with this tag</div>
+
+    <div th:if="${posts.hasPrevious() || posts.hasNext()}" th:replace="~{modules/pagination :: pagination(result=${posts})}"></div>
+  </main>
+  </div>
+
+  <footer th:replace="~{modules/footer :: footer}"></footer>
+  <div class="math-bg" id="mathBg"></div>
+</body>
+</html>

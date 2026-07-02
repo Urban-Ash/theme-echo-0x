@@ -1,0 +1,22 @@
+<head xmlns:th="https://www.thymeleaf.org" th:fragment="head(title, description)" th:with="themeVersion=${theme.spec.version != null ? theme.spec.version : '1.0.0'}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${#strings.isEmpty(title) ? site.title : title + ' - ' + site.title}">Echo 0x</title>
+  <meta name="description" th:content="${#strings.isEmpty(description) ? site.subtitle : description}">
+  <link rel="icon" th:if="${!#strings.isEmpty(site.favicon)}" th:href="${site.favicon}">
+  <script th:inline="javascript">
+    (function () {
+      var mode = /*[[${theme.config.style == null || #strings.isEmpty(theme.config.style.colorMode) ? 'system' : theme.config.style.colorMode}]]*/ "system";
+      var accent = /*[[${theme.config.style == null || #strings.isEmpty(theme.config.style.accentColor) ? '#e63946' : theme.config.style.accentColor}]]*/ "#e63946";
+      var pageTransitionEnabled = /*[[${theme.config.style == null || theme.config.style.enablePageTransition == null || theme.config.style.enablePageTransition == true || theme.config.style.enablePageTransition == 'true'}]]*/ true;
+      var coverStyle = /*[[${theme.config.style == null || #strings.isEmpty(theme.config.style.coverStyle) ? 'random' : theme.config.style.coverStyle}]]*/ "random";
+      var root = document.documentElement;
+      root.dataset.theme = mode === "system" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : mode;
+      root.dataset.pageTransition = pageTransitionEnabled ? "true" : "false";
+      root.dataset.coverStyle = coverStyle;
+      root.style.setProperty("--accent-config", accent);
+    })();
+  </script>
+  <link rel="stylesheet" th:href="@{/assets/css/style.css(v=${themeVersion})}">
+  <script defer th:src="@{/assets/js/main.js(v=${themeVersion})}"></script>
+</head>

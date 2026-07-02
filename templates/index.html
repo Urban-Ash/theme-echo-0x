@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{modules/head :: head(${site.title}, ${site.subtitle})}"></head>
+<body>
+  <header th:replace="~{modules/header :: header(path='~/home')}"></header>
+
+  <div data-pjax-root>
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-scan"></div>
+
+    <div class="hero-content" th:with="
+      heroLine1=${theme.config.home != null && !#strings.isEmpty(theme.config.home.heroTitleLine1) ? theme.config.home.heroTitleLine1 : 'break things.'},
+      heroLine2=${theme.config.home != null && !#strings.isEmpty(theme.config.home.heroTitleLine2) ? theme.config.home.heroTitleLine2 : 'build systems'},
+      heroLine3=${theme.config.home != null && !#strings.isEmpty(theme.config.home.heroTitleLine3) ? theme.config.home.heroTitleLine3 : 'that learn.'},
+      heroSubtitle=${theme.config.home != null && !#strings.isEmpty(theme.config.home.heroSubtitle) ? theme.config.home.heroSubtitle : '网安工程师 x AI 全栈开发。这里是关于攻防、模型、代码与一些不太相关的事的笔记。'},
+      stats=${siteStatsFinder.getStats()},
+      selectedMetrics=${theme.config.home != null ? theme.config.home.heroMetrics : null},
+      showHeroMeta=${selectedMetrics == null || !#lists.isEmpty(selectedMetrics)},
+      metricCount=${selectedMetrics == null ? 4 : #lists.size(selectedMetrics)}">
+      <div class="hero-copy">
+        <div class="hero-tag">
+          <span class="red">//</span>
+          <span data-current-year>2026</span>
+          · latest sync · written by
+          <span class="red" th:text="${site.title}">echo / 0x</span>
+        </div>
+        <h1>
+          <span th:text="${heroLine1}">break things.</span><span class="red-dot"></span><br>
+          <span class="stroke" th:text="${heroLine2}">build systems</span><br>
+          <span class="accent" th:text="${heroLine3}">that learn.</span>
+        </h1>
+        <p class="hero-sub" th:text="${heroSubtitle}">
+          网安工程师 x AI 全栈开发。这里是关于攻防、模型、代码与一些不太相关的事的笔记。
+        </p>
+      </div>
+
+      <div class="hero-meta" th:if="${showHeroMeta}" th:style="|--hero-meta-columns:${metricCount};|">
+        <th:block th:if="${selectedMetrics == null}">
+          <div class="cell">
+            <div class="k">posts</div>
+            <div class="v" th:text="${stats.post}">0</div>
+          </div>
+          <div class="cell">
+            <div class="k">visits</div>
+            <div class="v" th:text="${stats.visit}">0</div>
+          </div>
+          <div class="cell">
+            <div class="k">comments</div>
+            <div class="v" th:text="${stats.comment}">0</div>
+          </div>
+          <div class="cell">
+            <div class="k">categories</div>
+            <div class="v" th:text="${stats.category}">0</div>
+          </div>
+        </th:block>
+
+        <th:block th:unless="${selectedMetrics == null}">
+          <th:block th:each="metric : ${selectedMetrics}">
+            <div class="cell" th:if="${metric == 'posts'}">
+              <div class="k">posts</div>
+              <div class="v" th:text="${stats.post}">0</div>
+            </div>
+            <div class="cell" th:if="${metric == 'visits'}">
+              <div class="k">visits</div>
+              <div class="v" th:text="${stats.visit}">0</div>
+            </div>
+            <div class="cell" th:if="${metric == 'comments'}">
+              <div class="k">comments</div>
+              <div class="v" th:text="${stats.comment}">0</div>
+            </div>
+            <div class="cell" th:if="${metric == 'categories'}">
+              <div class="k">categories</div>
+              <div class="v" th:text="${stats.category}">0</div>
+            </div>
+            <div class="cell" th:if="${metric == 'upvotes'}">
+              <div class="k">upvotes</div>
+              <div class="v" th:text="${stats.upvote}">0</div>
+            </div>
+            <div class="cell" th:if="${metric == 'halo'}">
+              <div class="k">halo</div>
+              <div class="v" th:text="${site.version}">2.25.0</div>
+            </div>
+            <div class="cell" th:if="${metric == 'lang'}">
+              <div class="k">lang</div>
+              <div class="v" th:text="${site.language}">zh-CN</div>
+            </div>
+            <div class="cell" th:if="${metric == 'title'}">
+              <div class="k">site</div>
+              <div class="v" th:text="${site.title}">Echo 0x</div>
+            </div>
+            <div class="cell" th:if="${metric == 'url'}">
+              <div class="k">url</div>
+              <div class="v" th:text="${site.url}">https://example.com</div>
+            </div>
+            <div class="cell" th:if="${metric == 'registration'}">
+              <div class="k">signup</div>
+              <div class="v" th:text="${site.allowRegistration ? 'open' : 'closed'}">closed</div>
+            </div>
+          </th:block>
+        </th:block>
+      </div>
+    </div>
+
+    <a class="scroll-hint" href="#posts">
+      <span class="line"></span>
+      <span>scroll · 继续</span>
+    </a>
+  </section>
+
+  <main class="site-main" id="posts">
+    <div class="section-head">
+      <h2>Posts</h2>
+      <div class="meta">
+        共 <span class="red" th:text="${posts.total}">0</span> 篇<br>
+        last sync · just now
+      </div>
+    </div>
+
+    <div class="posts" th:if="${!#lists.isEmpty(posts.items)}">
+      <th:block th:each="post, stat : ${posts.items}">
+        <th:block th:replace="~{modules/post-card :: postCard(post=${post}, index=${stat.index})}"></th:block>
+      </th:block>
+    </div>
+    <div class="empty-state" th:if="${#lists.isEmpty(posts.items)}">no posts yet</div>
+
+    <div th:if="${posts.hasPrevious() || posts.hasNext()}" th:replace="~{modules/pagination :: pagination(result=${posts})}"></div>
+  </main>
+  </div>
+
+  <footer th:replace="~{modules/footer :: footer}"></footer>
+  <div class="math-bg" id="mathBg"></div>
+</body>
+</html>

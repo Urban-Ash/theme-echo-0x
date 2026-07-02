@@ -1,0 +1,34 @@
+<header class="topbar" id="topbar" xmlns:th="https://www.thymeleaf.org" th:fragment="header(path)"
+  th:with="
+    showClock=${theme.config.nav == null || theme.config.nav.showClock == null || theme.config.nav.showClock == true || theme.config.nav.showClock == 'true'},
+    showVisitorIp=${theme.config.nav != null && (theme.config.nav.showVisitorIp == true || theme.config.nav.showVisitorIp == 'true')},
+    visitorIpApi=${theme.config.nav == null || #strings.isEmpty(theme.config.nav.visitorIpApi) ? 'https://api.ipify.org?format=json' : theme.config.nav.visitorIpApi},
+    showPath=${theme.config.nav == null || theme.config.nav.showPath == null || theme.config.nav.showPath == true || theme.config.nav.showPath == 'true'},
+    configuredMenu=${theme.config.nav == null || #strings.isEmpty(theme.config.nav.menu) ? null : menuFinder.getByName(theme.config.nav.menu)},
+    primaryMenu=${menuFinder.getPrimary()},
+    navMenu=${configuredMenu != null ? configuredMenu : primaryMenu}">
+  <div class="tb-left">
+    <span class="tb-status"><span class="tb-dot"></span>SECURE · ONLINE</span>
+    <span id="tbClock" th:if="${showClock}">--:--:--</span>
+    <span id="tbVisitorIp" class="tb-ip" th:if="${showVisitorIp}" th:attr="data-ip-api=${visitorIpApi}">ip --.--.--.--</span>
+    <span class="tb-path" th:if="${showPath}" th:text="${path}">~/home</span>
+  </div>
+  <a th:href="@{/}" class="logo" aria-label="Home">
+    <span class="path" th:text="${site.title}">echo/0x</span>
+  </a>
+  <div class="tb-right">
+    <nav aria-label="Primary navigation">
+      <ul th:if="${navMenu != null && !#lists.isEmpty(navMenu.menuItems)}">
+        <li th:each="menuItem : ${navMenu.menuItems}">
+          <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" th:text="${menuItem.status.displayName}">menu</a>
+        </li>
+      </ul>
+      <ul th:if="${navMenu == null || #lists.isEmpty(navMenu.menuItems)}">
+        <li><a th:href="@{/archives}">archive</a></li>
+        <li><a th:href="@{/categories}">categories</a></li>
+        <li><a th:href="@{/tags}">tags</a></li>
+        <li><a th:href="@{/about}">about</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

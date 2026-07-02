@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{modules/head :: head('Categories', site.subtitle)}"></head>
+<body>
+  <header th:replace="~{modules/header :: header(path='~/categories')}"></header>
+
+  <div data-pjax-root>
+  <main class="page-shell">
+    <div class="page-hero">
+      <h1>Categories</h1>
+      <div class="meta">topic map · grouped notes</div>
+    </div>
+
+    <div class="terms-grid" th:if="${!#lists.isEmpty(categories)}">
+      <th:block th:replace="~{modules/category-tree :: single(categories=${categories})}"></th:block>
+    </div>
+    <div class="empty-state" th:if="${#lists.isEmpty(categories)}">no categories yet</div>
+  </main>
+  </div>
+
+  <footer th:replace="~{modules/footer :: footer}"></footer>
+  <div class="math-bg" id="mathBg"></div>
+</body>
+</html>

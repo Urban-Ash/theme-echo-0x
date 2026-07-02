@@ -1,0 +1,5 @@
+<nav class="pagination" aria-label="Pagination" xmlns:th="https://www.thymeleaf.org" th:fragment="pagination(result)">
+  <a class="page-link" th:classappend="${!result.hasPrevious()} ? ' disabled'" th:href="@{${result.prevUrl}}">prev</a>
+  <span class="page-count" th:text="${result.page} + ' / ' + ${result.totalPages}">1 / 1</span>
+  <a class="page-link" th:classappend="${!result.hasNext()} ? ' disabled'" th:href="@{${result.nextUrl}}">next</a>
+</nav>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{modules/head :: head(${linksTitle != null ? linksTitle : (singlePage != null ? singlePage.spec.title : 'Links')}, ${linksTitle != null ? '友情链接与站点收藏' : (singlePage != null ? singlePage.status.excerpt : '')})}"></head>
+<body th:with="isPluginLinks=${linksTitle != null}">
+  <header th:replace="~{modules/header :: header(path=${isPluginLinks ? '~/links' : (singlePage != null && !#strings.isEmpty(singlePage.spec.slug) ? (singlePage.spec.slug == 'links' ? '~/links' : '~/' + singlePage.spec.slug) : '~/links')})}"></header>
+
+  <div data-pjax-root>
+  <main class="page-shell links-shell">
+    <div class="page-hero">
+      <h1 th:text="${isPluginLinks ? linksTitle : (singlePage != null ? singlePage.spec.title : 'Links')}">Links</h1>
+      <div class="meta">
+        <span class="idx" th:text="${isPluginLinks ? 'links' : 'page'}">page</span>
+        <span th:if="${isPluginLinks && simpleGroups != null}" th:text="${#lists.size(simpleGroups)} + ' groups'">0 groups</span>
+        <span th:if="${!isPluginLinks && singlePage != null && singlePage.owner != null}" th:text="${singlePage.owner.displayName}">author</span>
+      </div>
+    </div>
+
+    <p
+      class="post-excerpt"
+      th:if="${!isPluginLinks && singlePage != null && !#strings.isEmpty(singlePage.status.excerpt)}"
+      th:text="${singlePage.status.excerpt}">
+      Useful links and references.
+    </p>
+
+    <th:block
+      th:if="${isPluginLinks}"
+      th:with="allGroups=${groups == null ? null : groups.?[links != null && !#lists.isEmpty(links)]}">
+      <nav class="link-groups" th:if="${simpleGroups != null && !#lists.isEmpty(simpleGroups)}">
+        <a th:href="@{/links}" th:classappend="${group == null ? ' active' : ''}">All</a>
+        <a
+          th:each="item : ${simpleGroups}"
+          th:href="@{/links(group=${item.metadata.name})}"
+          th:classappend="${group == item.metadata.name ? ' active' : ''}"
+          th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'Ungrouped' : item.spec.displayName}">
+          Group
+        </a>
+      </nav>
+
+      <div class="empty-state" th:if="${group == null && (allGroups == null || #lists.isEmpty(allGroups))}">
+        <span class="k">empty</span>
+        <span class="v">No links yet</span>
+        <p class="desc">Install and configure plugin-links, then add some links in the console.</p>
+      </div>
+
+      <th:block th:if="${group == null}">
+        <section
+          class="link-section"
+          th:each="item : ${allGroups}"
+          th:if="${item.links != null && !#lists.isEmpty(item.links)}">
+          <header class="link-section-head">
+            <h2 th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'Ungrouped' : item.spec.displayName}">Group</h2>
+            <span th:text="${#lists.size(item.links)} + ' links'">0 links</span>
+          </header>
+          <div class="links-grid">
+            <a class="link-card" th:each="link : ${item.links}" th:href="${link.spec.url}" target="_blank" rel="noopener noreferrer">
+              <span class="link-logo" th:classappend="${#strings.isEmpty(link.spec.logo) ? ' no-logo' : ''}">
+                <img th:if="${!#strings.isEmpty(link.spec.logo)}" th:src="${link.spec.logo}" th:alt="${link.spec.displayName}">
+                <span th:if="${#strings.isEmpty(link.spec.logo)}" th:text="${#strings.isEmpty(link.spec.displayName) ? '#' : #strings.substring(link.spec.displayName, 0, 1)}">#</span>
+              </span>
+              <span class="link-info">
+                <strong th:text="${link.spec.displayName}">Link name</strong>
+                <span class="desc" th:text="${link.spec.description}">Link description</span>
+                <span class="url" th:text="${link.spec.url}">https://example.com</span>
+              </span>
+            </a>
+          </div>
+        </section>
+      </th:block>
+
+      <th:block
+        th:if="${group != null}"
+        th:with="matchedGroups=${groups == null ? null : groups.?[metadata.name == group && links != null && !#lists.isEmpty(links)]}">
+        <div class="empty-state" th:if="${matchedGroups == null || #lists.isEmpty(matchedGroups)}">
+          <span class="k">empty</span>
+          <span class="v">No links in this group</span>
+          <p class="desc">Try another group or return to All to see every saved link.</p>
+        </div>
+        <section
+          class="link-section"
+          th:each="item : ${matchedGroups}">
+          <header class="link-section-head">
+            <h2 th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'Ungrouped' : item.spec.displayName}">Group</h2>
+            <span th:text="${#lists.size(item.links)} + ' links'">0 links</span>
+          </header>
+          <div class="links-grid">
+            <a class="link-card" th:each="link : ${item.links}" th:href="${link.spec.url}" target="_blank" rel="noopener noreferrer">
+              <span class="link-logo" th:classappend="${#strings.isEmpty(link.spec.logo) ? ' no-logo' : ''}">
+                <img th:if="${!#strings.isEmpty(link.spec.logo)}" th:src="${link.spec.logo}" th:alt="${link.spec.displayName}">
+                <span th:if="${#strings.isEmpty(link.spec.logo)}" th:text="${#strings.isEmpty(link.spec.displayName) ? '#' : #strings.substring(link.spec.displayName, 0, 1)}">#</span>
+              </span>
+              <span class="link-info">
+                <strong th:text="${link.spec.displayName}">Link name</strong>
+                <span class="desc" th:text="${link.spec.description}">Link description</span>
+                <span class="url" th:text="${link.spec.url}">https://example.com</span>
+              </span>
+            </a>
+          </div>
+        </section>
+      </th:block>
+    </th:block>
+
+    <article class="content" th:if="${!isPluginLinks && singlePage != null}" th:utext="${singlePage.content.content}">
+      <p>Use this page template to publish your links or resources with the editor content.</p>
+    </article>
+  </main>
+  </div>
+
+  <footer th:replace="~{modules/footer :: footer}"></footer>
+  <div class="math-bg" id="mathBg"></div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{modules/head :: head('Archives', site.subtitle)}"></head>
+<body>
+  <header th:replace="~{modules/header :: header(path='~/archive')}"></header>
+
+  <div data-pjax-root>
+  <main class="page-shell">
+    <div class="page-hero">
+      <h1>Archives</h1>
+      <div class="meta">all posts · chronological</div>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(archives.items)}">
+      <section class="archive-year" th:each="archive : ${archives.items}">
+        <h2 th:text="${archive.year}">2026</h2>
+        <div class="archive-month" th:each="month : ${archive.months}">
+          <h3 th:text="${month.month}">06</h3>
+          <ul class="archive-list">
+            <li th:each="post : ${month.posts}">
+              <a th:href="@{${post.status.permalink}}">
+                <time th:attr="datetime=${post.spec.publishTime}" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">publish time</time>
+                <span th:text="${post.spec.title}">Post title</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <div class="empty-state" th:if="${#lists.isEmpty(archives.items)}">no archive records</div>
+
+    <div th:if="${archives.hasPrevious() || archives.hasNext()}" th:replace="~{modules/pagination :: pagination(result=${archives})}"></div>
+  </main>
+  </div>
+
+  <footer th:replace="~{modules/footer :: footer}"></footer>
+  <div class="math-bg" id="mathBg"></div>
+</body>
+</html>

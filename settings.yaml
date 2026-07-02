@@ -1,0 +1,234 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: theme-echo-0x-setting
+spec:
+  forms:
+    - group: home
+      label: 首页
+      formSchema:
+        - $formkit: text
+          name: heroTitleLine1
+          label: 首页标题第一行
+          value: "break things."
+        - $formkit: text
+          name: heroTitleLine2
+          label: 首页标题第二行
+          value: "build systems"
+        - $formkit: text
+          name: heroTitleLine3
+          label: 首页标题第三行
+          value: "that learn."
+        - $formkit: textarea
+          name: heroSubtitle
+          label: 首页副标题
+          value: "网安工程师 x AI 全栈开发。这里是关于攻防、模型、代码与一些不太相关的事的笔记。"
+        - $formkit: select
+          name: heroMetrics
+          label: 首页数据面板
+          help: 最多选择 4 项；支持拖动排序；清空后将关闭首页数据面板显示。
+          multiple: true
+          maxCount: 4
+          sortable: true
+          clearable: true
+          searchable: true
+          value:
+            - posts
+            - visits
+            - comments
+            - categories
+          options:
+            - label: 文章数
+              value: posts
+            - label: 访问量
+              value: visits
+            - label: 评论数
+              value: comments
+            - label: 分类数
+              value: categories
+            - label: 点赞数
+              value: upvotes
+            - label: Halo 版本
+              value: halo
+            - label: 站点语言
+              value: lang
+            - label: 站点标题
+              value: title
+            - label: 站点地址
+              value: url
+            - label: 注册开关
+              value: registration
+    - group: style
+      label: 样式
+      formSchema:
+        - $formkit: color
+          name: accentColor
+          label: 辅助色调
+          value: "#e63946"
+        - $formkit: radio
+          name: colorMode
+          label: 明暗模式
+          value: "system"
+          options:
+            - label: 跟随系统
+              value: "system"
+            - label: 明亮
+              value: "light"
+            - label: 黑暗
+              value: "dark"
+        - $formkit: radio
+          name: enablePageTransition
+          label: 页面切换特效
+          value: "true"
+          options:
+            - label: 开启
+              value: "true"
+            - label: 关闭
+              value: "false"
+        - $formkit: radio
+          name: coverStyle
+          label: 封面风格
+          value: "random"
+          options:
+            - label: 随机混合（AI + 密码学 + 原风格）
+              value: "random"
+            - label: 仅 AI 主题
+              value: "ai"
+            - label: 仅密码学主题
+              value: "crypto"
+            - label: 仅原风格
+              value: "original"
+    - group: nav
+      label: 导航栏
+      formSchema:
+        - $formkit: radio
+          name: showClock
+          label: 显示时间
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: radio
+          name: showVisitorIp
+          label: 显示访客 IP
+          value: "false"
+          options:
+            - label: 隐藏
+              value: "false"
+            - label: 显示
+              value: "true"
+        - $formkit: text
+          name: visitorIpApi
+          label: 访客 IP 查询接口
+          help: 需返回纯文本 IP，或包含 ip/query/address 字段的 JSON
+          value: "https://api.ipify.org?format=json"
+        - $formkit: radio
+          name: showPath
+          label: 显示页面路径
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: menuRadio
+          name: menu
+          label: 导航菜单
+          help: 选择一个 Halo 菜单；菜单里可以添加独立页面、分类、标签或外链。未选择时使用主菜单，主菜单为空时使用默认导航。
+          value: ""
+    - group: post
+      label: 文章页
+      formSchema:
+        - $formkit: radio
+          name: showToc
+          label: 显示章节导航
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+    - group: footer
+      label: 页脚
+      formSchema:
+        - $formkit: radio
+          name: showPrompt
+          label: 显示左侧 cat
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: text
+          name: promptText
+          label: 左侧 cat 文案
+          help: 例如 CC BY-NC-SA 4.0
+          value: "CC BY-NC-SA 4.0"
+        - $formkit: text
+          name: promptUrl
+          label: 左侧 cat 跳转链接
+          value: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        - $formkit: radio
+          name: showFx
+          label: 显示 pause fx 按钮
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: radio
+          name: showRss
+          label: 显示 RSS
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: text
+          name: rssText
+          label: RSS 显示文字
+          value: "rss"
+        - $formkit: text
+          name: rssUrl
+          label: RSS 链接
+          value: "/rss.xml"
+        - $formkit: radio
+          name: showGithub
+          label: 显示 GitHub
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: text
+          name: githubText
+          label: GitHub 显示文字
+          value: "github"
+        - $formkit: text
+          name: githubUrl
+          label: GitHub 链接
+          value: "https://github.com/"
+        - $formkit: radio
+          name: showEmail
+          label: 显示 Email
+          value: "true"
+          options:
+            - label: 显示
+              value: "true"
+            - label: 隐藏
+              value: "false"
+        - $formkit: text
+          name: emailText
+          label: Email 显示文字
+          value: "email"
+        - $formkit: text
+          name: emailUrl
+          label: Email 链接
+          help: 可以填写 mailto:you@example.com
+          value: "mailto:hello@example.com"

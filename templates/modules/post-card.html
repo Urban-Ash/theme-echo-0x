@@ -1,0 +1,28 @@
+<a class="post reveal" th:fragment="postCard(post, index)" th:href="@{${post.status.permalink}}" xmlns:th="https://www.thymeleaf.org">
+  <div class="post-cover">
+    <img
+      class="post-cover-media"
+      th:if="${!#strings.isEmpty(post.spec.cover)}"
+      th:src="${post.spec.cover}"
+      th:alt="${post.spec.title}"
+      loading="lazy"
+      decoding="async">
+    <div
+      class="post-cover-media post-cover-formula"
+      th:unless="${!#strings.isEmpty(post.spec.cover)}"
+      th:attr="data-cover-index=${index},data-cover-title=${post.spec.title},aria-label=${post.spec.title}"
+      role="img"></div>
+    <span class="coords" th:attr="data-views=${post.stats == null ? 0 : post.stats.visit}">views · 0x000</span>
+  </div>
+  <div class="post-meta">
+    <span th:if="${!#lists.isEmpty(post.categories)}" class="post-tags">
+      <span th:each="category : ${post.categories}" th:text="${category.spec.displayName}">AI</span>
+    </span>
+    <span th:if="${#lists.isEmpty(post.categories) && !#lists.isEmpty(post.tags)}" class="post-tags">
+      <span th:each="tag : ${post.tags}" th:text="${tag.spec.displayName}">note</span>
+    </span>
+    <time class="post-time" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd HH:mm')}">2025-09-09 07:25</time>
+  </div>
+  <h3 class="post-title" th:text="${post.spec.title}">Post title</h3>
+  <p class="post-excerpt" th:text="${post.status.excerpt}">Excerpt</p>
+</a>

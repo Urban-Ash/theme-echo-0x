@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{modules/head :: head(${singlePage.spec.title}, ${singlePage.status.excerpt})}"></head>
+<body>
+  <header th:replace="~{modules/header :: header(path=${singlePage.spec.slug == 'about' ? '~/about' : '~/' + singlePage.spec.slug})}"></header>
+
+  <div data-pjax-root>
+  <article class="article-shell">
+    <header class="article-head">
+      <div class="post-meta">
+        <span class="idx">page</span>
+        <span th:if="${singlePage.owner != null}" th:text="${singlePage.owner.displayName}">author</span>
+      </div>
+      <h1 th:text="${singlePage.spec.title}">Page title</h1>
+      <p class="post-excerpt" th:text="${singlePage.status.excerpt}">Excerpt</p>
+    </header>
+
+    <div class="content" th:utext="${singlePage.content.content}"></div>
+  </article>
+  </div>
+
+  <footer th:replace="~{modules/footer :: footer}"></footer>
+  <div class="math-bg" id="mathBg"></div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: theme-echo-0x
+spec:
+  displayName: Echo 0x
+  author:
+    name: Codex
+    website: https://openai.com
+  description: Dark terminal style Halo theme for security, AI and technical notes.
+  homepage: https://docs.halo.run/category/%E4%B8%BB%E9%A2%98%E5%BC%80%E5%8F%91/
+  version: 1.0.0
+  requires: 2.25.0
+  settingName: theme-echo-0x-setting
+  configMapName: theme-echo-0x-configMap
+  customTemplates:
+    page:
+      - name: About
+        description: About page template
+        file: about.html
+      - name: Links
+        description: Links page template
+        file: links.html
+  license:
+    - name: MIT
+      url: https://opensource.org/licenses/MIT
