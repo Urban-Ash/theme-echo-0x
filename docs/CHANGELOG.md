@@ -1,34 +1,39 @@
 # Changelog
 
+## 1.1.0 (2026-07-03)
+
+### Added
+- Added a unified auxiliary page design language for `tags`, `categories`, `archives`, and `links`
+- Added a terminal-style links index that supports grouped friend links and single-page fallback
+- Added release notes for the `1.1.0` milestone
+
+### Changed
+- Refreshed the tag cloud into a panel-based layout while keeping frequency-driven weights
+- Reworked categories into a tree index and archives into a timeline stream
+- Updated project documentation structure, installation guide, and development notes
+- Bumped theme version to `1.1.0`
+
+### Fixed
+- Fixed short-page layout behavior by stabilizing the global PJAX container width and flex growth
+- Fixed footer transparency and bottom placement in the shared page shell
+- Fixed Halo compatibility issues in category and links templates caused by overly aggressive template expressions
+
 ## 1.0.0 (2026-07-02)
 
-### 新增
-- 🎉 正式发布 Echo 0x 1.0.0
-- ✨ 新增 AGENTS.md 开发规范文档
-- ✨ 新增 docs/ 目录下的主题使用文档
-- ✨ 统一资源版本管理，从 theme.yaml 自动读取
-- ✨ 所有封面支持实时计算的数学动画
-- ✨ AI 风格：Sigmoid 曲线、神经网络、损失函数、注意力矩阵
-- ✨ 密码学风格：XOR 运算、SHA-256 哈希、Feistel 网络
-- ✨ 原风格：Lissajous 曲线、扫描线、同心圆、三角形、网格、高斯点云
-- ✨ 封面风格可配置（后台设置）
-- ✨ 首页数据面板可配置（显示项和排序）
-- ✨ 完善的响应式布局
-- ✨ 完整的 Halo 2.25+ 适配
-- ✨ 支持独立页面模板 About 和 Links
-- ✨ 支持标签/分类/归档/作者页面
-- ✨ 支持章节导航
-- ✨ 支持明暗模式切换
-- ✨ 支持页面切换特效（可选）
-- ✨ 支持访客 IP 和时钟显示（可选）
+### Added
+- First stable release of Echo 0x for Halo `2.25.0+`
+- Added `AGENTS.md` collaboration guidelines and the initial `docs/` documentation set
+- Added animated math-driven covers for AI, crypto, and original styles
+- Added configurable homepage metrics, theme color mode, and cover style options
+- Added page templates for posts, pages, tags, categories, archives, authors, About, and Links
+- Added optional TOC, visitor IP, clock, and page transition effects
 
-### 优化
-- 🔥 封面动画仅在进入视口时运行（IntersectionObserver）
-- 🔥 使用 requestAnimationFrame 实现流畅动画
-- 🔥 统一的资源版本，避免缓存问题
-- 🔥 代码结构优化，模块化清晰
+### Improved
+- Optimized animated covers to start when entering the viewport via `IntersectionObserver`
+- Unified asset versioning through `theme.yaml` to reduce cache issues
+- Organized shared modules and frontend assets into a clearer structure
 
-### 修复
-- 🐛 修复了封面不动态计算的问题
-- 🐛 修复了硬编码版本号的问题
-- 🐛 修复了多个页面重复引用 JS 的问题
+### Fixed
+- Fixed static cover output so covers render dynamically on the client side
+- Fixed hard-coded version handling in theme assets
+- Fixed duplicate script inclusion across multiple templates
