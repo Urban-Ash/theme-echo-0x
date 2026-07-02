@@ -8,7 +8,7 @@ spec:
     name: Codex
     website: https://openai.com
   description: Dark terminal style Halo theme for security, AI and technical notes.
-  logo: https://raw.githubusercontent.com/Urban-Ash/theme-echo-0x/main/docs/assets/echo-0x-icon.svg
+  logo: /themes/theme-echo-0x/assets/branding/echo-0x-icon.svg
   homepage: https://github.com/Urban-Ash/theme-echo-0x
   repo: https://github.com/Urban-Ash/theme-echo-0x.git
   issues: https://github.com/Urban-Ash/theme-echo-0x/issues
