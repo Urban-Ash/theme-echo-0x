@@ -1,11 +1,27 @@
 <th:block xmlns:th="https://www.thymeleaf.org">
-  <th:block th:fragment="single(categories)" th:each="category : ${categories}">
-    <a class="term-card" th:href="@{${category.status.permalink}}">
-      <span class="k">category</span>
-      <span class="v" th:text="${category.spec.displayName}">Category</span>
-      <span class="desc" th:if="${!#strings.isEmpty(category.spec.description)}" th:text="${category.spec.description}">Description</span>
-      <span class="desc" th:text="${category.postCount} + ' posts'">0 posts</span>
+  <th:block th:fragment="single(categories, depth)" th:each="category, itemStat : ${categories}">
+    <a
+      class="catindex-row"
+      th:classappend="${depth > 0 ? ' is-sub' : ''}"
+      th:href="@{${category.status.permalink}}"
+      th:style="|--cat-weight:${category.postCount == null || category.postCount < 1 ? 1 : category.postCount};--cat-depth:${depth};|">
+      <span
+        class="catindex-idx"
+        th:text="${depth > 0 ? '--' : (itemStat.count < 10 ? 'cat#0' + itemStat.count : 'cat#' + itemStat.count)}">cat#01</span>
+      <span class="catindex-main">
+        <strong class="catindex-name" th:text="${category.spec.displayName}">Category</strong>
+        <span
+          class="catindex-desc"
+          th:text="${!#strings.isEmpty(category.spec.description) ? category.spec.description : (depth > 0 ? 'sub branch' : 'root branch')}">Description</span>
+      </span>
+      <span class="catindex-bar" aria-hidden="true"></span>
+      <span class="catindex-count">
+        <span class="value" th:text="${category.postCount == null ? 0 : category.postCount}">0</span>
+        <span class="unit">posts</span>
+      </span>
     </a>
-    <th:block th:if="${!#lists.isEmpty(category.children)}" th:replace="~{modules/category-tree :: single(categories=${category.children})}"></th:block>
+    <th:block
+      th:if="${!#lists.isEmpty(category.children)}"
+      th:replace="~{modules/category-tree :: single(categories=${category.children}, depth=${depth + 1})}"></th:block>
   </th:block>
 </th:block>

@@ -1,36 +1,85 @@
 <!DOCTYPE html>
 <html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
 <head th:replace="~{modules/head :: head('Archives', site.subtitle)}"></head>
-<body>
+<body class="aux-page-body archives-page-body">
   <header th:replace="~{modules/header :: header(path='~/archive')}"></header>
 
-  <div data-pjax-root>
-  <main class="page-shell">
-    <div class="page-hero">
-      <h1>Archives</h1>
-      <div class="meta">all posts · chronological</div>
-    </div>
-
-    <div th:if="${!#lists.isEmpty(archives.items)}">
-      <section class="archive-year" th:each="archive : ${archives.items}">
-        <h2 th:text="${archive.year}">2026</h2>
-        <div class="archive-month" th:each="month : ${archive.months}">
-          <h3 th:text="${month.month}">06</h3>
-          <ul class="archive-list">
-            <li th:each="post : ${month.posts}">
-              <a th:href="@{${post.status.permalink}}">
-                <time th:attr="datetime=${post.spec.publishTime}" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">publish time</time>
-                <span th:text="${post.spec.title}">Post title</span>
-              </a>
-            </li>
-          </ul>
+  <div
+    class="aux-page-main"
+    data-pjax-root
+    th:with="
+      archiveItems=${archives != null ? archives.items : null},
+      yearCount=${archiveItems == null ? 0 : #lists.size(archiveItems)},
+      siteStats=${siteStatsFinder.getStats()},
+      updatedAt=${#temporals.format(T(java.time.LocalDate).now(), 'yyyy.MM.dd')}">
+    <main class="aux-page-shell archives-page-shell">
+      <section class="aux-page-frame archindex-frame">
+        <div class="aux-page-kicker">
+          <span>// <span th:text="${siteStats.post}">33</span> posts</span>
+          <span>sorted by date</span>
+          <span>newest first</span>
         </div>
-      </section>
-    </div>
-    <div class="empty-state" th:if="${#lists.isEmpty(archives.items)}">no archive records</div>
 
-    <div th:if="${archives.hasPrevious() || archives.hasNext()}" th:replace="~{modules/pagination :: pagination(result=${archives})}"></div>
-  </main>
+        <div class="aux-page-head">
+          <h1 class="aux-page-title">
+            <span class="stroke">~/</span><span>Arch</span><span class="accent">ives</span>
+          </h1>
+          <p class="aux-page-lead">
+            按时间倒序排列的全部文章。想找以前看过的一篇内容，
+            从年份往下扫，顺着时间线就能很快定位。
+          </p>
+        </div>
+
+        <div class="aux-page-stats">
+          <span>years<strong th:text="${yearCount}">3</strong></span>
+          <span>total posts<strong th:text="${siteStats.post}">33</strong></span>
+          <span>updated<strong class="accent" th:text="${updatedAt}">2026.07.02</strong></span>
+        </div>
+
+        <div class="archindex-stream" th:if="${archiveItems != null && !#lists.isEmpty(archiveItems)}">
+          <section class="archindex-group" th:each="archive : ${archiveItems}">
+            <header class="archindex-year">
+              <span class="year" th:text="${archive.year}">2026</span>
+              <span class="count" th:text="${#lists.size(archive.months)} + ' months'">6 months</span>
+            </header>
+
+            <th:block th:each="month : ${archive.months}">
+              <a
+                class="archindex-row"
+                th:each="post : ${month.posts}"
+                th:href="@{${post.status.permalink}}">
+                <span
+                  class="date"
+                  th:with="publishedAt=${post.spec.publishTime}">
+                  <span th:text="${#temporals.format(publishedAt, 'MM / dd')}">07 / 02</span>
+                  <span class="day" th:text="${#temporals.format(publishedAt, 'E')}">Wed</span>
+                </span>
+                <span class="title" th:text="${post.spec.title}">Post title</span>
+                <span class="meta">
+                  <span
+                    class="cat"
+                    th:text="${post.categories != null && !#lists.isEmpty(post.categories) ? post.categories[0].spec.displayName : 'uncategorized'}">category</span>
+                  <span class="red" th:text="${post.status.commentsCount == null ? 0 : post.status.commentsCount}">0</span>
+                  <span>comments</span>
+                </span>
+              </a>
+            </th:block>
+          </section>
+        </div>
+
+        <div class="archindex-empty" th:if="${archiveItems == null || #lists.isEmpty(archiveItems)}">
+          <div>
+            <strong>~/empty</strong>
+            这里还没有归档记录，等文章发布之后，这条时间线会从最新内容开始延展。
+          </div>
+        </div>
+
+        <div
+          class="archindex-pagination"
+          th:if="${archives.hasPrevious() || archives.hasNext()}"
+          th:replace="~{modules/pagination :: pagination(result=${archives})}"></div>
+      </section>
+    </main>
   </div>
 
   <footer th:replace="~{modules/footer :: footer}"></footer>

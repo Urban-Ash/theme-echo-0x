@@ -1,21 +1,52 @@
 <!DOCTYPE html>
 <html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
 <head th:replace="~{modules/head :: head('Categories', site.subtitle)}"></head>
-<body>
+<body class="aux-page-body categories-page-body">
   <header th:replace="~{modules/header :: header(path='~/categories')}"></header>
 
-  <div data-pjax-root>
-  <main class="page-shell">
-    <div class="page-hero">
-      <h1>Categories</h1>
-      <div class="meta">topic map · grouped notes</div>
-    </div>
+  <div
+    class="aux-page-main"
+    data-pjax-root
+    th:with="
+      rootCount=${categories == null ? 0 : #lists.size(categories)},
+      siteStats=${siteStatsFinder.getStats()},
+      updatedAt=${#temporals.format(T(java.time.LocalDate).now(), 'yyyy.MM.dd')}">
+    <main class="aux-page-shell categories-page-shell">
+      <section class="aux-page-frame categories-index-frame">
+        <div class="aux-page-kicker">
+          <span>// <span th:text="${rootCount}">7</span> root groups</span>
+          <span>tree view</span>
+          <span>grouped notes</span>
+        </div>
 
-    <div class="terms-grid" th:if="${!#lists.isEmpty(categories)}">
-      <th:block th:replace="~{modules/category-tree :: single(categories=${categories})}"></th:block>
-    </div>
-    <div class="empty-state" th:if="${#lists.isEmpty(categories)}">no categories yet</div>
-  </main>
+        <div class="aux-page-head">
+          <h1 class="aux-page-title">
+            <span class="stroke">~/</span><span>categor</span><span class="accent">ies</span>
+          </h1>
+          <p class="aux-page-lead">
+            比起标签，这里更像一张目录树。主分类负责大的主题归档，
+            子分类继续往下分叉，方便沿着主题路径追内容。
+          </p>
+        </div>
+
+        <div class="aux-page-stats">
+          <span>root groups<strong th:text="${rootCount}">7</strong></span>
+          <span>mapped posts<strong th:text="${siteStats.post}">33</strong></span>
+          <span>updated<strong class="accent" th:text="${updatedAt}">2026.07.02</strong></span>
+        </div>
+
+        <div class="catindex-tree" th:if="${categories != null && !#lists.isEmpty(categories)}">
+          <th:block th:replace="~{modules/category-tree :: single(categories=${categories}, depth=${0})}"></th:block>
+        </div>
+
+        <div class="catindex-empty" th:if="${categories == null || #lists.isEmpty(categories)}">
+          <div>
+            <strong>~/empty</strong>
+            这里还没有分类结构，等内容整理完成之后再回来查看目录树。
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
   <footer th:replace="~{modules/footer :: footer}"></footer>

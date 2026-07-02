@@ -1,25 +1,81 @@
 <!DOCTYPE html>
 <html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="~{modules/head :: head('Tags', site.subtitle)}"></head>
-<body>
+<head th:replace="~{modules/head :: head('Tag Cloud', '终端风格的标签索引与热度分布页')}"></head>
+<body class="aux-page-body tags-page-body">
   <header th:replace="~{modules/header :: header(path='~/tags')}"></header>
 
-  <div data-pjax-root>
-  <main class="page-shell">
-    <div class="page-hero">
-      <h1>Tags</h1>
-      <div class="meta">signals · cross references</div>
-    </div>
+  <div
+    class="aux-page-main"
+    data-pjax-root
+    th:with="
+      tagCount=${tags == null ? 0 : #lists.size(tags)},
+      siteStats=${siteStatsFinder.getStats()},
+      updatedAt=${#temporals.format(T(java.time.LocalDate).now(), 'yyyy.MM.dd')}">
+    <main class="aux-page-shell tags-page-shell">
+      <section class="aux-page-frame tagsindex-frame">
+        <div class="aux-page-kicker">
+          <span>// <span th:text="${tagCount}">24</span> tags</span>
+          <span>sized by frequency</span>
+          <span>filtered by topic</span>
+        </div>
 
-    <div class="terms-grid" th:if="${!#lists.isEmpty(tags)}">
-      <a class="term-card" th:each="tag : ${tags}" th:href="@{${tag.status.permalink}}">
-        <span class="k">tag</span>
-        <span class="v" th:text="'#' + ${tag.spec.displayName}">#tag</span>
-        <span class="desc" th:text="${tag.postCount} + ' posts'">0 posts</span>
-      </a>
-    </div>
-    <div class="empty-state" th:if="${#lists.isEmpty(tags)}">no tags yet</div>
-  </main>
+        <div class="aux-page-head">
+          <h1 class="aux-page-title tagsindex-title">
+            <span class="stroke">#</span><span>tag</span><span class="accent">cloud</span>
+          </h1>
+          <p class="aux-page-lead">
+            所有笔记的标签集合。字号代表文章数量多少，不代表更重要性。
+            点一个进去，只看相关的内容和轨迹。
+          </p>
+        </div>
+
+        <div class="aux-page-stats">
+          <span>tags<strong th:text="${tagCount}">24</strong></span>
+          <span>total posts<strong th:text="${siteStats.post}">33</strong></span>
+          <span>updated<strong class="accent" th:text="${updatedAt}">2026.07.02</strong></span>
+        </div>
+
+        <div class="tagsindex-panel" th:if="${tags != null && !#lists.isEmpty(tags)}">
+          <div class="tagsindex-panel-head">
+            <h2>
+              <span class="num">01</span>
+              <span>tag density</span>
+            </h2>
+            <div class="meta">
+              <span>$ <span class="accent">heat map</span></span>
+              <span th:text="${tagCount} + ' loaded'">24 loaded</span>
+            </div>
+          </div>
+
+          <div class="tagsindex-cloud">
+            <a
+              class="tagsindex-chip"
+              th:each="tag : ${tags}"
+              th:href="@{${tag.status.permalink}}"
+              th:style="|--tag-weight:${tag.postCount == null || tag.postCount < 1 ? 1 : tag.postCount};|"
+              th:classappend="${tag.postCount != null && tag.postCount >= 12 ? ' is-hot' : (tag.postCount != null && tag.postCount >= 5 ? ' is-warm' : '')}">
+              <span class="hash">#</span>
+              <span class="name" th:text="${tag.spec.displayName}">security</span>
+              <span class="count" th:text="${tag.postCount == null ? 0 : tag.postCount}">32</span>
+            </a>
+          </div>
+
+          <p class="tagsindex-note">
+            <span class="level is-hot">hot</span>
+            <span class="level is-warm">warm</span>
+            <span class="level">cold</span>
+            <span class="desc">热度根据标签下文章数量自动调整，点击任意标签进入对应聚合页。</span>
+          </p>
+        </div>
+
+        <div class="tagsindex-empty" th:if="${tags == null || #lists.isEmpty(tags)}">
+          <div>
+            <strong>~/empty</strong>
+            这里还没有可展示的标签，等第一批内容生成之后再回来看看。
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
   <footer th:replace="~{modules/footer :: footer}"></footer>
