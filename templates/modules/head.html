@@ -8,15 +8,30 @@
     (function () {
       var mode = /*[[${theme.config.style == null || #strings.isEmpty(theme.config.style.colorMode) ? 'system' : theme.config.style.colorMode}]]*/ "system";
       var accent = /*[[${theme.config.style == null || #strings.isEmpty(theme.config.style.accentColor) ? '#e63946' : theme.config.style.accentColor}]]*/ "#e63946";
-      var pageTransitionEnabled = /*[[${theme.config.style == null || theme.config.style.enablePageTransition == null || theme.config.style.enablePageTransition == true || theme.config.style.enablePageTransition == 'true'}]]*/ true;
+      var pageTransitionEnabled = /*[[${theme.config.style != null && (theme.config.style.enablePageTransition == true || theme.config.style.enablePageTransition == 'true')}]]*/ false;
       var coverStyle = /*[[${theme.config.style == null || #strings.isEmpty(theme.config.style.coverStyle) ? 'random' : theme.config.style.coverStyle}]]*/ "random";
       var root = document.documentElement;
-      root.dataset.theme = mode === "system" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : mode;
+      var accentHex = accent.replace("#", "");
+      if (accentHex.length === 3) {
+        accentHex = accentHex.split("").map(function (part) { return part + part; }).join("");
+      }
+      var accentRgb = /^[0-9a-f]{6}$/i.test(accentHex)
+        ? [0, 2, 4].map(function (offset) { return parseInt(accentHex.slice(offset, offset + 2), 16); }).join(",")
+        : "230,57,70";
+      root.classList.add("js");
+      var actualTheme = mode === "system" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark") : mode;
+      root.dataset.theme = actualTheme;
+      root.dataset.colorScheme = mode === "system" ? "auto" : actualTheme;
+      root.classList.remove("dark", "light", "color-scheme-auto", "color-scheme-dark", "color-scheme-light");
+      root.classList.add(actualTheme);
+      root.classList.add(mode === "system" ? "color-scheme-auto" : "color-scheme-" + actualTheme);
       root.dataset.pageTransition = pageTransitionEnabled ? "true" : "false";
       root.dataset.coverStyle = coverStyle;
       root.style.setProperty("--accent-config", accent);
+      root.style.setProperty("--accent-rgb", accentRgb);
     })();
   </script>
   <link rel="stylesheet" th:href="@{/assets/css/style.css(v=${themeVersion})}">
   <script defer th:src="@{/assets/js/main.js(v=${themeVersion})}"></script>
+  <script defer th:src="@{/assets/js/plugin-widgets.js(v=${themeVersion})}"></script>
 </head>

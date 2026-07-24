@@ -6,12 +6,13 @@
 - **主题名称**: `theme-echo-0x`，必须与文件夹名、`theme.yaml:metadata.name`一致
 - **文件组织**
   - `theme.yaml`：Halo 主题声明，设置 `requires: 2.25.0`（必须≥ Halo 2.25）
-  - `settings.yaml`：后台可配置项（分组：home、style、nav、post、footer）
+  - `settings.yaml`：后台可配置项（分组：home、style、nav、plugin、post、footer）
   - `templates/`：Thymeleaf 模板
     - `templates/modules/`：公共片段
     - `templates/assets/`：静态资源
       - `css/style.css`：统一 CSS
-      - `js/main.js`：统一 JS（封面、过渡动画、工具函数）
+      - `js/main.js`：主题 JS（封面、目录、状态检测、过渡动画、工具函数）
+      - `js/plugin-widgets.js`：Halo 搜索、评论等插件组件的样式桥接
 - **打包规则**
   - 排除 `.DS_Store`、`._*` 等 macOS 隐藏文件
   - 包名必须是版本号.zip（如 `1.0.0.zip`）
@@ -77,6 +78,7 @@
 - **封面选择**：后台配置 coverStyle（random/ai/crypto/original），根据标题关键词自动选择对应风格
 - **首页统计**：最多选 4 项，可配置
 - **导航栏**：可配置时钟、IP、路径、菜单
+- **插件兼容**：可配置搜索、评论入口，并保留 Halo 页脚扩展点
 - **页脚**：左侧提示、RSS、GitHub、Email、暂停特效按钮
 
 ### 新增功能规则

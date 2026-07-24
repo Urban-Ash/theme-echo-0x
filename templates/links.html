@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org" xmlns:halo="https://www.halo.run">
 <head th:replace="~{modules/head :: head(${linksTitle != null ? linksTitle : (singlePage != null ? singlePage.spec.title : 'Links')}, ${linksTitle != null ? '友情链接与站点收藏' : (singlePage != null ? singlePage.status.excerpt : '')})}"></head>
 <body
   class="aux-page-body links-page-body"
@@ -10,11 +10,12 @@
     class="aux-page-main"
     data-pjax-root
     th:with="
-      totalGroups=${simpleGroups == null ? 0 : #lists.size(simpleGroups)}">
+      totalGroups=${simpleGroups == null ? 0 : #lists.size(simpleGroups)},
+      activeGroupBlockCount=${group == null ? totalGroups : (links == null || #lists.isEmpty(links) ? 0 : 1)}">
     <main class="aux-page-shell links-page-shell">
       <section class="aux-page-frame linksindex-frame">
         <div class="aux-page-kicker">
-          <span>// <span th:text="${isPluginLinks ? (effectiveGroups == null ? 0 : #lists.size(effectiveGroups)) : 1}">1</span> channel blocks</span>
+          <span>// <span th:text="${isPluginLinks ? activeGroupBlockCount : 1}">1</span> channel blocks</span>
           <span>terminal style</span>
           <span><code>net.connect()</code></span>
         </div>
@@ -45,11 +46,7 @@
         </div>
 
         <th:block
-          th:if="${isPluginLinks}"
-          th:with="
-            allGroups=${groups == null ? null : groups.?[links != null && !#lists.isEmpty(links)]},
-            matchedGroups=${group == null || groups == null ? null : groups.?[metadata != null && metadata.name == group && links != null && !#lists.isEmpty(links)]},
-            effectiveGroups=${group == null ? allGroups : matchedGroups}">
+          th:if="${isPluginLinks}">
           <nav class="linksindex-filter" th:if="${simpleGroups != null && !#lists.isEmpty(simpleGroups)}">
             <a th:href="@{/links}" th:classappend="${group == null ? ' active' : ''}">all</a>
             <a
@@ -62,22 +59,22 @@
             </a>
           </nav>
 
-          <div class="linksindex-empty empty-state" th:if="${group == null && (allGroups == null || #lists.isEmpty(allGroups))}">
+          <div class="linksindex-empty empty-state" th:if="${group == null && (groups == null || #lists.isEmpty(groups))}">
             <div>
               <strong>~/empty</strong>
               链路表还是空的，等分组和链接写进来之后，这里会像终端一样逐条亮起。
             </div>
           </div>
 
-          <div class="linksindex-empty empty-state" th:if="${group != null && (matchedGroups == null || #lists.isEmpty(matchedGroups))}">
+          <div class="linksindex-empty empty-state" th:if="${group != null && (links == null || #lists.isEmpty(links))}">
             <div>
               <strong>~/empty</strong>
               这一组链路还没有回应，换一条线路，或者回到 `all` 看完整清单。
             </div>
           </div>
 
-          <th:block th:if="${effectiveGroups != null && !#lists.isEmpty(effectiveGroups)}">
-            <section class="linksindex-section" th:each="item, itemStat : ${effectiveGroups}">
+          <th:block th:if="${group == null && groups != null && !#lists.isEmpty(groups)}">
+            <section class="linksindex-section" th:each="item, itemStat : ${groups}" th:if="${item.links != null && !#lists.isEmpty(item.links)}">
               <div class="linksindex-group-label"
                 th:text="${item.spec == null || #strings.isEmpty(item.spec.displayName) ? 'ungrouped' : item.spec.displayName}">Group</div>
 
@@ -89,10 +86,10 @@
                 rel="noopener noreferrer">
                 <span class="arrow">→</span>
                 <span
-                  class="status"
-                  th:classappend="${linkStat.count % 6 == 0 ? ' warn' : (linkStat.count % 5 == 0 ? ' idle' : ' online')}">
+                  class="status checking"
+                  data-link-status>
                   <span class="dot"></span>
-                  <span th:text="${linkStat.count % 6 == 0 ? 'warn' : (linkStat.count % 5 == 0 ? 'idle' : 'online')}">online</span>
+                  <span data-link-status-label>checking</span>
                 </span>
                 <span class="name">
                   <strong th:text="${link.spec.displayName}">Link name</strong>
@@ -107,11 +104,51 @@
               </a>
             </section>
           </th:block>
+
+          <th:block th:if="${group != null && links != null && !#lists.isEmpty(links)}">
+            <section class="linksindex-section">
+              <div class="linksindex-group-label"
+                th:text="${#strings.isEmpty(group) ? 'ungrouped' : group}">Group</div>
+
+              <a
+                class="linksindex-row"
+                th:each="link, linkStat : ${links}"
+                th:href="${link.spec.url}"
+                target="_blank"
+                rel="noopener noreferrer">
+                <span class="arrow">→</span>
+                <span
+                  class="status checking"
+                  data-link-status>
+                  <span class="dot"></span>
+                  <span data-link-status-label>checking</span>
+                </span>
+                <span class="name">
+                  <strong th:text="${link.spec.displayName}">Link name</strong>
+                  <span class="desc">
+                    <span class="url" th:text="${link.spec.url}">https://example.com</span>
+                    <span th:text="${#strings.isEmpty(link.spec.description) ? '暂无补充说明。' : link.spec.description}">Link description</span>
+                  </span>
+                </span>
+                <span class="cat-tag" th:text="${#strings.isEmpty(group) ? 'misc' : group}">group</span>
+              </a>
+            </section>
+          </th:block>
         </th:block>
 
-        <article class="linksindex-article" th:if="${!isPluginLinks && singlePage != null}" th:utext="${singlePage.content.content}">
+        <article id="content" class="linksindex-article plugin-lightgallery-content" th:if="${!isPluginLinks && singlePage != null}" th:utext="${singlePage.content.content}">
           <p>Use this page template to publish your links or resources with the editor content.</p>
         </article>
+
+        <section
+          class="plugin-comment-shell"
+          th:if="${singlePage != null && (theme.config.plugin == null || theme.config.plugin.enableComment == null || theme.config.plugin.enableComment == true || theme.config.plugin.enableComment == 'true') && pluginFinder.available('PluginCommentWidget') && (singlePage.spec.allowComment == null || singlePage.spec.allowComment == true || singlePage.spec.allowComment == 'true')}">
+          <div class="label">// comments</div>
+          <halo:comment
+            group="content.halo.run"
+            kind="SinglePage"
+            th:attr="name=${singlePage.metadata.name}" />
+        </section>
       </section>
     </main>
   </div>

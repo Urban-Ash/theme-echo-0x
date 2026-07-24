@@ -5,7 +5,7 @@
   <header th:replace="~{modules/header :: header(path='~/home')}"></header>
 
   <div data-pjax-root>
-  <section class="hero">
+  <section class="hero home-intro">
     <div class="hero-grid"></div>
     <div class="hero-vignette"></div>
     <div class="hero-scan"></div>
@@ -16,21 +16,26 @@
       heroLine3=${theme.config.home != null && !#strings.isEmpty(theme.config.home.heroTitleLine3) ? theme.config.home.heroTitleLine3 : 'that learn.'},
       heroSubtitle=${theme.config.home != null && !#strings.isEmpty(theme.config.home.heroSubtitle) ? theme.config.home.heroSubtitle : '网安工程师 x AI 全栈开发。这里是关于攻防、模型、代码与一些不太相关的事的笔记。'},
       stats=${siteStatsFinder.getStats()},
+      commentCount=${stats.comment == null ? 0 : stats.comment},
       selectedMetrics=${theme.config.home != null ? theme.config.home.heroMetrics : null},
+      forceThemePostCardCover=${theme.config.home != null && (theme.config.home.forceThemePostCardCover == true || theme.config.home.forceThemePostCardCover == 'true')},
       showHeroMeta=${selectedMetrics == null || !#lists.isEmpty(selectedMetrics)},
       metricCount=${selectedMetrics == null ? 4 : #lists.size(selectedMetrics)}">
       <div class="hero-copy">
         <div class="hero-tag">
           <span class="red">//</span>
+          field notes ·
           <span data-current-year>2026</span>
-          · latest sync · written by
-          <span class="red" th:text="${site.title}">echo / 0x</span>
+          · <span class="red" th:text="${stats.post}">0</span> entries
         </div>
-        <h1>
-          <span th:text="${heroLine1}">break things.</span><span class="red-dot"></span><br>
-          <span class="stroke" th:text="${heroLine2}">build systems</span><br>
+        <h1 class="home-site-title" th:text="${site.title}">Echo 0x</h1>
+        <p class="home-statement">
+          <span th:text="${heroLine1}">break things.</span>
+          <span class="divider" aria-hidden="true">/</span>
+          <span th:text="${heroLine2}">build systems</span>
+          <span class="divider" aria-hidden="true">/</span>
           <span class="accent" th:text="${heroLine3}">that learn.</span>
-        </h1>
+        </p>
         <p class="hero-sub" th:text="${heroSubtitle}">
           网安工程师 x AI 全栈开发。这里是关于攻防、模型、代码与一些不太相关的事的笔记。
         </p>
@@ -47,8 +52,8 @@
             <div class="v" th:text="${stats.visit}">0</div>
           </div>
           <div class="cell">
-            <div class="k">visits</div>
-            <div class="v" th:text="${stats.visit}">0</div>
+            <div class="k">comments</div>
+            <div class="v" th:text="${commentCount}">0</div>
           </div>
           <div class="cell">
             <div class="k">categories</div>
@@ -67,8 +72,8 @@
               <div class="v" th:text="${stats.visit}">0</div>
             </div>
             <div class="cell" th:if="${metric == 'comments'}">
-              <div class="k">visits</div>
-              <div class="v" th:text="${stats.visit}">0</div>
+              <div class="k">comments</div>
+              <div class="v" th:text="${commentCount}">0</div>
             </div>
             <div class="cell" th:if="${metric == 'categories'}">
               <div class="k">categories</div>
@@ -103,24 +108,22 @@
       </div>
     </div>
 
-    <a class="scroll-hint" href="#posts">
-      <span class="line"></span>
-      <span>scroll · 继续</span>
-    </a>
   </section>
 
-  <main class="site-main" id="posts">
+  <main class="site-main home-posts-main" id="posts">
     <div class="section-head">
-      <h2>Posts</h2>
-      <div class="meta">
-        共 <span class="red" th:text="${posts.total}">0</span> 篇<br>
-        last sync · just now
+      <h2>Latest posts</h2>
+      <div class="meta home-posts-meta">
+        <span>共 <span class="red" th:text="${posts.total}">0</span> 篇 · last sync just now</span>
+        <a class="home-archive-link" th:href="@{/archives}">view archive &rarr;</a>
       </div>
     </div>
 
     <div class="posts" th:if="${!#lists.isEmpty(posts.items)}">
       <th:block th:each="post, stat : ${posts.items}">
-        <th:block th:replace="~{modules/post-card :: postCard(post=${post}, index=${stat.index})}"></th:block>
+        <th:block th:with="forceThemeCover=${forceThemePostCardCover}">
+          <th:block th:replace="~{modules/post-card :: postCard(post=${post}, index=${stat.index})}"></th:block>
+        </th:block>
       </th:block>
     </div>
     <div class="empty-state" th:if="${#lists.isEmpty(posts.items)}">no posts yet</div>

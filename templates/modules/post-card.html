@@ -1,17 +1,28 @@
-<a class="post reveal" th:fragment="postCard(post, index)" th:href="@{${post.status.permalink}}" xmlns:th="https://www.thymeleaf.org">
-  <div class="post-cover">
-    <img
-      class="post-cover-media"
-      th:if="${!#strings.isEmpty(post.spec.cover)}"
-      th:src="${post.spec.cover}"
-      th:alt="${post.spec.title}"
-      loading="lazy"
-      decoding="async">
+<a
+  class="post reveal"
+  th:fragment="postCard(post, index)"
+  th:with="
+    useThemeCover=${forceThemeCover == true || forceThemeCover == 'true'},
+    hasImageCover=${!(forceThemeCover == true || forceThemeCover == 'true') && !#strings.isEmpty(post.spec.cover)}"
+  th:href="@{${post.status.permalink}}"
+  xmlns:th="https://www.thymeleaf.org">
+  <div
+    class="post-cover"
+    th:classappend="${hasImageCover} ? ' cover-has-image' : ''"
+    th:attr="aria-busy=${hasImageCover ? 'true' : null}">
     <div
       class="post-cover-media post-cover-formula"
-      th:unless="${!#strings.isEmpty(post.spec.cover)}"
-      th:attr="data-cover-index=${index},data-cover-title=${post.spec.title},aria-label=${post.spec.title}"
+      th:classappend="${hasImageCover} ? ' cover-loading-formula' : ''"
+      th:attr="data-cover-index=${index},data-cover-title=${post.spec.title},aria-label=${post.spec.title},aria-hidden=${hasImageCover ? 'true' : null}"
       role="img"></div>
+    <img
+      class="post-cover-media cover-image-source"
+      th:if="${hasImageCover}"
+      th:src="${post.spec.cover}"
+      th:alt="${post.spec.title}"
+      data-cover-image
+      loading="lazy"
+      decoding="async">
     <span class="coords" th:attr="data-views=${post.stats == null ? 0 : post.stats.visit}">views · 0x000</span>
   </div>
   <div class="post-meta">

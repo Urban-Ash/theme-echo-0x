@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
 <head th:replace="~{modules/head :: head('404', 'The requested page could not be found.')}"></head>
-<body>
+<body class="error-page-body">
   <header th:replace="~{modules/header :: header(path='~/404')}"></header>
 
   <div data-pjax-root>
-  <main class="page-shell">
+  <main class="page-shell error-page-shell">
     <div class="page-hero">
       <h1>404</h1>
-      <div class="meta">not found · fallback route</div>
+      <div class="meta">route not found · ~/404</div>
     </div>
-    <div class="empty-state">
-      <span class="k">missing</span>
-      <span class="v">Page not found</span>
-      <p class="desc" th:text="${#strings.defaultString(error.detail, 'The page you requested does not exist, has moved, or the link is no longer valid.')}">
-        The page you requested does not exist, has moved, or the link is no longer valid.
-      </p>
-      <p><a th:href="@{/}">return home</a></p>
-    </div>
+    <section class="error-diagnostic" aria-labelledby="error-status">
+      <div class="error-command" aria-label="Requested route">
+        <span class="prompt" aria-hidden="true">$</span>
+        <span>resolve "</span><span class="route" data-error-path>/missing</span><span>"</span><span class="error-cursor" aria-hidden="true"></span>
+      </div>
+      <p class="error-status" id="error-status">ENOENT · route not found</p>
+      <p class="error-copy">The requested route does not exist or may have moved.</p>
+      <nav class="error-actions" aria-label="Recovery links">
+        <a data-error-back th:href="@{/}">&larr; back</a>
+        <a th:href="@{/}">return home &rarr;</a>
+      </nav>
+    </section>
   </main>
   </div>
 

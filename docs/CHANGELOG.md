@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.0 (2026-07-25)
+
+### Added
+- Added configurable homepage statements, index metrics, article-card cover policy, navigation menu, visitor IP, footer links, accent color, and color mode controls
+- Added title-derived formula covers and animated SVG loading placeholders for post cards and article covers
+- Added a left-side article table of contents with active-section tracking and optional display
+- Added Halo search, comment, gallery-content, and footer extension integration
+- Added client-side health probing for Links entries with `checking`, `online`, `warn`, and `idle` states
+- Added a terminal-style 404 diagnostic with the requested path and blinking cursor
+
+### Changed
+- Reworked the homepage into a denser blog index led by the Halo site title, configurable statement, metrics, and latest posts
+- Changed page transitions to an optional lightweight fade and disabled them by default
+- Expanded light mode and configurable accent support across formula covers and plugin widgets
+- Refined post excerpts, cover loading behavior, navigation path labels, footer controls, and auxiliary-page consistency
+- Bumped theme version to `1.3.0`
+
+### Fixed
+- Fixed homepage comments metrics to use comment counts instead of duplicate visit counts
+- Fixed formula visibility in light mode and live system color-scheme updates
+- Fixed visitor IP refresh after PJAX navigation
+- Fixed grouped Links rendering and removed fabricated link availability states
+- Fixed plugin widgets and comments disappearing when components mount after initial page load
+
 ## 1.2.0 (2026-07-03)
 
 ### Added

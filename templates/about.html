@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org" xmlns:halo="https://www.halo.run">
 <head th:replace="~{modules/head :: head(${singlePage.spec.title}, ${singlePage.status.excerpt})}"></head>
 <body>
   <header th:replace="~{modules/header :: header(path='~/about')}"></header>
@@ -15,7 +15,17 @@
       <p class="post-excerpt" th:text="${singlePage.status.excerpt}">About this site</p>
     </header>
 
-    <div class="content" th:utext="${singlePage.content.content}"></div>
+    <div id="content" class="content plugin-lightgallery-content" th:utext="${singlePage.content.content}"></div>
+
+    <section
+      class="plugin-comment-shell"
+      th:if="${(theme.config.plugin == null || theme.config.plugin.enableComment == null || theme.config.plugin.enableComment == true || theme.config.plugin.enableComment == 'true') && pluginFinder.available('PluginCommentWidget') && (singlePage.spec.allowComment == null || singlePage.spec.allowComment == true || singlePage.spec.allowComment == 'true')}">
+      <div class="label">// comments</div>
+      <halo:comment
+        group="content.halo.run"
+        kind="SinglePage"
+        th:attr="name=${singlePage.metadata.name}" />
+    </section>
   </article>
   </div>
 

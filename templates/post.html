@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org">
+<html th:attr="lang=${#strings.isEmpty(site.language) ? 'zh-CN' : site.language}" xmlns:th="https://www.thymeleaf.org" xmlns:halo="https://www.halo.run">
 <head th:replace="~{modules/head :: head(${post.spec.title}, ${post.status.excerpt})}"></head>
 <body>
   <header th:replace="~{modules/header :: header(path='~/post')}"></header>
@@ -10,7 +10,8 @@
       publishedDate=${#temporals.format(post.spec.publishTime, 'yyyy / MM / dd')},
       publishedClock=${#temporals.format(post.spec.publishTime, 'E HH:mm')},
       firstCategory=${post.categories != null && !#lists.isEmpty(post.categories) ? post.categories[0] : null},
-      visitCount=${post.stats == null || post.stats.visit == null ? 0 : post.stats.visit}">
+      visitCount=${post.stats == null || post.stats.visit == null ? 0 : post.stats.visit},
+      forceThemeCover=${theme.config.post != null && (theme.config.post.forceThemeCover == true || theme.config.post.forceThemeCover == 'true')}">
   <aside
     class="article-toc"
     id="articleToc"
@@ -18,19 +19,23 @@
     aria-label="章节导航"></aside>
 
   <article class="article-shell post-article-shell">
-    <div class="post-hero-cover">
-      <img
-        th:if="${!#strings.isEmpty(post.spec.cover)}"
-        th:src="${post.spec.cover}"
-        th:attr="data-cover-title=${post.spec.title}"
-        th:alt="${post.spec.title}"
-        loading="lazy"
-        decoding="async">
+    <div
+      class="post-hero-cover"
+      th:classappend="${!forceThemeCover && !#strings.isEmpty(post.spec.cover)} ? ' cover-has-image' : ''"
+      th:attr="aria-busy=${!forceThemeCover && !#strings.isEmpty(post.spec.cover) ? 'true' : null}">
       <div
         class="article-cover-formula post-cover-media post-cover-formula"
-        th:unless="${!#strings.isEmpty(post.spec.cover)}"
-        th:attr="data-cover-title=${post.spec.title},aria-label=${post.spec.title}"
+        th:classappend="${!forceThemeCover && !#strings.isEmpty(post.spec.cover)} ? ' cover-loading-formula' : ''"
+        th:attr="data-cover-title=${post.spec.title},aria-label=${post.spec.title},aria-hidden=${!forceThemeCover && !#strings.isEmpty(post.spec.cover) ? 'true' : null}"
         role="img"></div>
+      <img
+        class="cover-image-source"
+        th:if="${!forceThemeCover && !#strings.isEmpty(post.spec.cover)}"
+        th:src="${post.spec.cover}"
+        th:alt="${post.spec.title}"
+        data-cover-image
+        loading="lazy"
+        decoding="async">
       <span class="post-hero-badge">
         <span>entry</span>
         <span class="accent" th:text="${publishedDate}">2026 / 07 / 02</span>
@@ -74,12 +79,22 @@
       </div>
     </header>
 
-    <div class="content" th:utext="${post.content.content}"></div>
+    <div id="content" class="content plugin-lightgallery-content" th:utext="${post.content.content}"></div>
 
     <nav class="article-nav" aria-label="Post navigation">
       <a th:href="@{/archives}">../archives</a>
       <a th:href="@{/}">~/home</a>
     </nav>
+
+    <section
+      class="plugin-comment-shell"
+      th:if="${(theme.config.plugin == null || theme.config.plugin.enableComment == null || theme.config.plugin.enableComment == true || theme.config.plugin.enableComment == 'true') && pluginFinder.available('PluginCommentWidget') && (post.spec.allowComment == null || post.spec.allowComment == true || post.spec.allowComment == 'true')}">
+      <div class="label">// comments</div>
+      <halo:comment
+        group="content.halo.run"
+        kind="Post"
+        th:attr="name=${post.metadata.name}" />
+    </section>
   </article>
   </div>
 

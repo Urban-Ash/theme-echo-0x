@@ -23,6 +23,7 @@ theme-echo-0x/
 │   ├── RELEASE-1.0.0.md
 │   ├── RELEASE-1.1.0.md
 │   ├── RELEASE-1.2.0.md
+│   ├── RELEASE-1.3.0.md
 │   └── development.md
 └── templates/
     ├── index.html
@@ -51,7 +52,7 @@ theme-echo-0x/
 
 ### `settings.yaml`
 
-- 定义后台表单项，当前分为 `home`、`style`、`nav`、`post`、`footer` 五组
+- 定义后台表单项，当前分为 `home`、`style`、`nav`、`plugin`、`post`、`footer` 六组
 - 模板里读取配置时，要为可空项设置回退值
 - 新增配置时优先保持命名直接、默认值明确
 
@@ -63,8 +64,13 @@ theme-echo-0x/
 
 ### `templates/assets/js/main.js`
 
-- 负责封面动画、数学背景、PJAX、TOC、时钟、访客 IP 等前端行为
+- 负责封面动画、图片加载占位、数学背景、PJAX、TOC、时钟、访客 IP、友链状态检测等前端行为
 - 新增视觉动画时，优先保证可重复计算，不依赖一次性随机值
+
+### `templates/assets/js/plugin-widgets.js`
+
+- 负责搜索与评论插件的样式桥接
+- 跨 Shadow DOM 注入样式时需保持幂等，并在插件延迟挂载后继续生效
 
 ### `templates/modules/*.html`
 
@@ -106,6 +112,8 @@ theme-echo-0x/
 - 编写 Thymeleaf 表达式时尽量保守，避免依赖不稳定的方法调用
 - 导航和页面链接优先使用 Halo 提供的上下文变量，减少硬编码路径
 - 修改资源后记得同步版本号，避免缓存导致的“改了没生效”假象
+- 友链状态属于客户端参考结果，不应在模板中伪造服务端在线状态
+- 正文插件扩展点必须同时尊重主题开关、插件可用状态和内容自身的评论开关
 
 ## 配置读取示例
 
@@ -151,8 +159,11 @@ python3 build.py
 
 - [ ] 首页封面和数据面板正常
 - [ ] 文章页 TOC、分页、相关推荐正常
+- [ ] 有主图、无主图和主图加载失败时的封面状态正常
 - [ ] 标签、分类、归档、友情链接页正常
+- [ ] 友情链接状态可从 `checking` 更新为 `online / warn / idle`
 - [ ] About 与普通独立页渲染正常
+- [ ] 搜索、评论、图库插件在安装和未安装两种情况下均不破坏页面
 - [ ] 404 和错误页可访问
 - [ ] 明暗模式切换正常
 - [ ] PJAX 过渡正常

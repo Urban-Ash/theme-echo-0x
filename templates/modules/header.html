@@ -4,6 +4,8 @@
     showVisitorIp=${theme.config.nav != null && (theme.config.nav.showVisitorIp == true || theme.config.nav.showVisitorIp == 'true')},
     visitorIpApi=${theme.config.nav == null || #strings.isEmpty(theme.config.nav.visitorIpApi) ? 'https://api.ipify.org?format=json' : theme.config.nav.visitorIpApi},
     showPath=${theme.config.nav == null || theme.config.nav.showPath == null || theme.config.nav.showPath == true || theme.config.nav.showPath == 'true'},
+    searchFeatureEnabled=${theme.config.plugin == null || theme.config.plugin.enableSearch == null || theme.config.plugin.enableSearch == true || theme.config.plugin.enableSearch == 'true'},
+    searchWidgetAvailable=${searchFeatureEnabled && pluginFinder.available('PluginSearchWidget')},
     configuredMenu=${theme.config.nav == null || #strings.isEmpty(theme.config.nav.menu) ? null : menuFinder.getByName(theme.config.nav.menu)},
     primaryMenu=${menuFinder.getPrimary()},
     navMenu=${configuredMenu != null ? configuredMenu : primaryMenu}">
@@ -19,11 +21,17 @@
   <div class="tb-right">
     <nav aria-label="Primary navigation">
       <ul th:if="${navMenu != null && !#lists.isEmpty(navMenu.menuItems)}">
+        <li th:if="${searchWidgetAvailable}">
+          <a href="#" data-search-trigger="true" title="search">search</a>
+        </li>
         <li th:each="menuItem : ${navMenu.menuItems}">
           <a th:href="@{${menuItem.status.href}}" th:target="${menuItem.spec.target?.value}" th:text="${menuItem.status.displayName}">menu</a>
         </li>
       </ul>
       <ul th:if="${navMenu == null || #lists.isEmpty(navMenu.menuItems)}">
+        <li th:if="${searchWidgetAvailable}">
+          <a href="#" data-search-trigger="true" title="search">search</a>
+        </li>
         <li><a th:href="@{/archives}">archive</a></li>
         <li><a th:href="@{/categories}">categories</a></li>
         <li><a th:href="@{/tags}">tags</a></li>

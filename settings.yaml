@@ -9,24 +9,25 @@ spec:
       formSchema:
         - $formkit: text
           name: heroTitleLine1
-          label: 首页标题第一行
+          label: 首页标语第一段
+          help: 此处修改首页标语的第一段。站点名称由 Halo 站点设置控制。
           value: "break things."
         - $formkit: text
           name: heroTitleLine2
-          label: 首页标题第二行
+          label: 首页标语第二段
           value: "build systems"
         - $formkit: text
           name: heroTitleLine3
-          label: 首页标题第三行
+          label: 首页标语第三段
           value: "that learn."
         - $formkit: textarea
           name: heroSubtitle
-          label: 首页副标题
+          label: 首页简介
           value: "网安工程师 x AI 全栈开发。这里是关于攻防、模型、代码与一些不太相关的事的笔记。"
         - $formkit: select
           name: heroMetrics
-          label: 首页数据面板
-          help: 最多选择 4 项；支持拖动排序；清空后将关闭首页数据面板显示。
+          label: 首页索引数据
+          help: 最多选择 4 项；支持拖动排序；清空后将隐藏该行数据。
           multiple: true
           maxCount: 4
           sortable: true
@@ -58,6 +59,16 @@ spec:
               value: url
             - label: 注册开关
               value: registration
+        - $formkit: radio
+          name: forceThemePostCardCover
+          label: 首页文章卡片强制使用主题封面
+          help: 开启后首页文章卡片忽略文章自带封面，统一使用主题公式封面；关闭后有文章封面时显示文章封面，没有时回退到主题公式封面。
+          value: "false"
+          options:
+            - label: 开启
+              value: "true"
+            - label: 关闭
+              value: "false"
     - group: style
       label: 样式
       formSchema:
@@ -79,7 +90,8 @@ spec:
         - $formkit: radio
           name: enablePageTransition
           label: 页面切换特效
-          value: "true"
+          help: 默认关闭；开启后使用轻量的淡入切换。
+          value: "false"
           options:
             - label: 开启
               value: "true"
@@ -138,6 +150,27 @@ spec:
           label: 导航菜单
           help: 选择一个 Halo 菜单；菜单里可以添加独立页面、分类、标签或外链。未选择时使用主菜单，主菜单为空时使用默认导航。
           value: ""
+    - group: plugin
+      label: 插件
+      formSchema:
+        - $formkit: radio
+          name: enableSearch
+          label: 启用搜索组件入口
+          value: "true"
+          options:
+            - label: 启用
+              value: "true"
+            - label: 关闭
+              value: "false"
+        - $formkit: radio
+          name: enableComment
+          label: 启用评论组件
+          value: "true"
+          options:
+            - label: 启用
+              value: "true"
+            - label: 关闭
+              value: "false"
     - group: post
       label: 文章页
       formSchema:
@@ -149,6 +182,16 @@ spec:
             - label: 显示
               value: "true"
             - label: 隐藏
+              value: "false"
+        - $formkit: radio
+          name: forceThemeCover
+          label: 强制使用主题封面
+          help: 开启后忽略文章自带封面，统一使用主题公式封面；关闭后有文章封面时显示文章封面，没有时回退到主题公式封面。
+          value: "false"
+          options:
+            - label: 开启
+              value: "true"
+            - label: 关闭
               value: "false"
     - group: footer
       label: 页脚

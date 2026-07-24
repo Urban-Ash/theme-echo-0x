@@ -1,4 +1,4 @@
-<footer id="contact" xmlns:th="https://www.thymeleaf.org" th:fragment="footer"
+<footer id="contact" xmlns:th="https://www.thymeleaf.org" xmlns:halo="https://www.halo.run" th:fragment="footer"
   th:with="
     showPrompt=${theme.config.footer == null || theme.config.footer.showPrompt == null || theme.config.footer.showPrompt == true || theme.config.footer.showPrompt == 'true'},
     promptText=${theme.config.footer == null || #strings.isEmpty(theme.config.footer.promptText) ? 'CC BY-NC-SA 4.0' : theme.config.footer.promptText},
@@ -24,4 +24,5 @@
     <a th:if="${showGithub}" th:href="${githubUrl}" target="_blank" rel="noopener noreferrer" th:text="${githubText}">github</a>
     <a th:if="${showEmail}" th:href="${emailUrl}" th:text="${emailText}">email</a>
   </div>
+  <halo:footer />
 </footer>
